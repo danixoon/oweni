@@ -3,7 +3,7 @@
 
 <head>
     <title>Элетронная медицинская карта</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/page/style.css">
     <meta charset="UTF-8">
     <meta name=viewport content="width=device-width, initial-scale=1.0 ">
     <meta name="description" content="Электронная медиинская карта. Макет для проекта.">
@@ -17,13 +17,13 @@
 <body>
 
     <div class="menu">
-        <a href="main.php">
+        <a href="/page/main.php">
             <div class="button">
                 <div class="mtext">Главная</div>
                 <img src="home.svg">
             </div>
         </a>
-        <a href="PersonalThings.php">
+        <a href="/page/PersonalThings.php">
             <div class="button">
                 <div class="mtext">ЭМК</div>
                 <img src="EMC.svg">
