@@ -1,0 +1,13 @@
+{
+  "name": "oweni",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node ./index.js"
+  },
+  "dependencies": {
+    "sharp": "^0.25.4",
+    "tesseract.js": "^2.1.1"
+  }
+}
