@@ -1,0 +1,294 @@
+@import url('https://fonts.googleapis.com/css?family=Poiret+One');
+@import url('https://fonts.googleapis.com/css?family=Istok+Web:400,400i,700,700i&subset=cyrillic,cyrillic-ext,latin-ext');
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+  margin: 0;
+  padding: 0;
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+body { line-height: 1; }
+blockquote, q { quotes: none; }
+blockquote:before, blockquote:after, q:before, q:after { content: none; }
+table { border-collapse: collapse; border-spacing: 0; }
+
+* {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+/* ------ */
+html {
+   overflow-x: hidden;
+}
+
+body {
+    font-family: 'Istok Web';
+    background-color: #f1f4f9;
+}
+
+
+.img-header {
+    background: url("http://www.hetmeisjemetdevoedselallergie.nl/wp-content/uploads/sites/12/2016/11/Melk-575x575.png") no-repeat center;
+    background-size: 90%;
+    height: 60px;
+    width: 60px;
+    float: left;
+    margin-right: 10px;
+    filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.75));
+}
+.menu {
+    position: fixed;
+    left: -150px;
+    font-family: "Play";
+    font-size: 80%;
+    top: 0px;
+    width: 200px;
+    height: 100vh;
+    background-color: #32323a;
+    color: white;
+    transition: .5s;
+    color: black;
+    box-shadow: inset -78px 1px 96px -82px rgba(0,0,0,0.75);
+}
+
+.menu:hover {
+    transform: translateX(150px);
+    box-shadow: inset -35px 0px 95px -16px rgba(0,0,0,0.48);
+}
+.menu .button:hover {
+    background-color: #29282e;
+    box-shadow: inset -35px 0px 95px -16px rgba(0,0,0,0.48);
+}
+
+.menu:hover .button img{
+    transform: translateX(-150px);
+}
+.menu:hover .button .mtext{
+    transform: translateX(-230px);
+    color: rgba(255,255,255,1);
+}
+.menu:hover + .content {
+    transform: translateX(150px);
+}
+.button {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    color: rgba(0,0,0,0);
+}
+.button img {
+    position: absolute;
+    top: 0px;
+    left: 150px;
+    padding: 15px;
+    height: 50px;
+    display: block;
+    transition: .5s;
+}
+
+.mtext {
+    height: 100%;
+    line-height: 50px;
+    position: absolute;
+    left: 280px;
+    top: 0px;
+    transition: .7s;
+    width: 100%;
+}
+
+.content {
+    height: 100vh;
+    width: calc(100% - 50px);
+    color: black;
+    position: absolute;
+    left: 50px;
+    top: 0px;
+    transition: .4s;
+    background-color: rgba(0,0,0,0);
+    font-weight: 300;
+    text-align: center;
+}
+h1 {
+    font-size: 170%;
+}
+.header {
+    width: calc(100%);
+    height: 70px;
+    line-height: 65px;
+    background-color: rgb(250,255,255);
+    border-bottom: 1px solid silver;
+    padding: 5px;
+    white-space: nowrap;
+    margin-bottom: 20px;
+    text-align: left;
+}
+.header img {
+    height: 100%;
+    display: block;
+    float: left;
+    padding-right: 20px;
+}
+
+.proc .proc-header{
+    width: 100%;
+    height: 20px;
+}
+
+.plus {
+    vertical-align: top;
+    margin: 15px;
+    margin-top: 0px;
+    margin-left: 0px;
+    width: 25%;
+    display: inline-block;
+}
+
+.plus li {
+    margin-bottom: 7px;
+}
+.blue {
+    background-color: #59abe3;
+}
+.red {
+    background-color: #ff3333;
+}
+.header-plus {
+    padding: 12px;
+    padding-top: 14px;
+    color: white;
+}
+.content-plus {
+    padding: 7px;
+    padding-right: 20px;
+    background-color: white;
+    border: 1px solid silver;
+    border-top: 0px;
+    text-align: justify;
+}
+
+.blocku {
+    width: 48%;
+    border: 1px solid silver;
+    background: white;
+    padding: 10px;
+    text-align: left;
+    vertical-align: top;
+    display: inline-block;
+    margin-right: 5px;
+    margin-bottom: 10px;
+}
+.blocku h1 {
+    margin: 8px;
+    margin-left: 1px;
+}
+.blocku img {
+    margin: -5px;
+    float: left;
+    shape-outside: ellipse();
+    margin-right: 7px;
+    margin-bottom: 7px
+}
+.blockf {
+    width: 95%;
+    border: 1px solid silver;
+    background: white;
+    padding: 15px;
+    text-align: left;
+    vertical-align: top;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+.blockf h1 {
+    margin-bottom: 5px;
+}
+
+.white {
+    background-color: white;
+}
+video{
+   width: calc(100vw - 70px);
+   overflow: hidden;
+   margin: 0px;
+   margin-top: -20px;
+}
+
+.intext {
+	width: 30%;
+	margin: 5px;
+	margin-left: 0px;
+	height: 100px;
+}
+button {
+	padding: 5px;
+	background: white;
+	color: black;
+	border: 1px solid #a9a9a9;
+}
+
+@media (max-width: 768px) {
+	.intext {
+		width: 100%;
+	}
+    .plus, .blockf, .blocku {
+        width: 90%;
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+    .plus  {
+        float: none;
+        margin: 0 auto;
+        margin-bottom: 15px;
+    }
+    .blocku {
+        float: none;
+        margin: 0 auto;
+        margin-bottom: 15px;
+     }
+    .blocku img {
+        width: 100px;
+        height: 100px;
+    }
+    .menu {
+        height: 200vh;
+    }
+    h1 {
+        font-size: 135%;
+    }
+    .blockf img {
+        width: 35%;
+    }
+    video {
+        width: 0px;
+        height: 0px;
+        margin: 0px;
+        padding: 0px;
+    }
+    .white {
+        background-color: #f1f4f9;
+    }
+}
+
+.shadow {
+    box-shadow: 21px 17px 80px -32px rgba(0,0,0,0.75);
+}
+.por{
+    display: inline-block;
+    margin: 10px;
+    margin-right: 25px;
+}
+.binput{
+    padding-left: 10%;
+    display: inline-block;
+}
+a{
+    text-decoration: none;
+}
+
+
