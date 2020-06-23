@@ -51,14 +51,7 @@ fieldset,
 form,
 label,
 legend,
-table,
 caption,
-tbody,
-tfoot,
-thead,
-tr,
-th,
-td,
 article,
 aside,
 canvas,
@@ -411,14 +404,6 @@ a {
 .card__text {
   font-family: Georgia, "Times New Roman", Times, serif;
   font-size: 12px;
-}
-
-.page {
-  display: flex;
-  flex-flow: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
 }
 
 .form {

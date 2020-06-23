@@ -1,0 +1,26 @@
+.page {
+  display: flex;
+  flex-flow: column;
+  /* justify-content: center; */
+  /* align-items: center; */
+  height: 100vh;
+}
+
+.task-search__form {
+  display: flex;
+  width: 100%;
+}
+
+.task-search__table {
+  border: 1px solid #eee;
+  padding: 0.25rem;
+}
+
+.task-search__table > tbody > tr > td {
+  padding: 0.25rem;
+}
+
+.task-search__table:first-child {
+  text-align: center;
+  font-weight: bold;
+}

@@ -28,7 +28,7 @@ render_header("Главная");
   <div class="content">
     <div class="header shadow">
       <div class="img-header"></div>
-      <h1><?php echo $PAGE_SCHEMA[$PAGE]["name"] ?></h1>
+      <h1><?php echo $PAGE_SCHEMA[$PAGE]["name"]  ?></h1>
     </div>
     <main class="page">
       <?php

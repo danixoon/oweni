@@ -7,7 +7,8 @@ $PAGE_SCHEMA = array(
   "task" => array(
     "name" => "Личные дела",
     "group" => array(
-      array("name" => "Поиск", "action" => "search", "link" => "/task/search")
+      array("name" => "Поиск", "action" => "search", "link" => "/task/search"),
+      array("name" => "Добавление", "action" => "add", "link" => "/task/add")
     )
   )
 );
@@ -20,4 +21,19 @@ $mysqli = new mysqli("localhost", "root", "", "oweni");
 function start_with($string, $predicate)
 {
   return substr($string, 0, strlen($predicate)) === $predicate;
+}
+
+
+function send_post($url, $payload)
+{
+  if ($curl = curl_init()) {
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_POST, true);
+    curl_setopt($curl, CURLOPT_POSTFIELDS,  $payload);
+    $out = curl_exec($curl);
+    curl_close($curl);
+    $err = curl_error($curl);
+    print_r($err);
+  }
 }

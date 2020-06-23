@@ -1,11 +1,13 @@
-function onFormSubmit(form) {
+function onFormSubmit(form, body) {
   const data = new FormData(form);
   const url = form.getAttribute("action");
   const method = form.getAttribute("method") || "GET";
 
   const query = new URLSearchParams(data).toString();
 
-  fetch(`${url}/?${query}`, { method })
+  console.log(data);
+
+  fetch(`${url}/?${query}`, { method, body: data })
     .then(async (response) => {
       if (response.ok) window.location.reload();
       else {

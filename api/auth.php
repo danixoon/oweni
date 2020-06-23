@@ -4,8 +4,8 @@ require_once realpath(__DIR__ . "/../config.php");
 
 if ($_SERVER["REQUEST_METHOD"] !== "GET") return http_response_code(404);
 
-$username = $_GET["username"];
-$password = $_GET["password"];
+$username = $_REQUEST["username"];
+$password = $_REQUEST["password"];
 
 // $mysqli->query("")
 
