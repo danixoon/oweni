@@ -24,9 +24,9 @@ const extractValue = (text) =>
   text
     .split("")
     .filter((char) => {
-      const c = char.charCodeAt(0);
-      const ok = c === " " || (c >= 1024 && c <= 1279) || (c >= 48 && c <= 57);
-      return ok;
+      // const c = char.charCodeAt(0);
+      // const ok = c === " " || (c >= 1024 && c <= 1279) || (c >= 48 && c <= 57);
+      return true;
     })
     .join("");
 
@@ -137,9 +137,7 @@ const saveImage = async (buffer, schemaName, fieldName) => {
 
 const parseDocument = async (docName, docImage) => {
   const schema = schemas[docName];
-  const imageCrop = sharp(docImage)
-    .resize({ width: 1240 / 2, height: 1754 / 2, fit: "contain" })
-    .trim(33);
+  const imageCrop = sharp(docImage).resize({ width: 1240, height: 1754, fit: "contain" }).trim(33);
 
   const buffer = await imageCrop.toBuffer();
   await util.promisify(fs.rmdir)(path.resolve(__dirname, `./result/${docName}`), { recursive: true });
@@ -148,7 +146,7 @@ const parseDocument = async (docName, docImage) => {
     schema.map(async (data) => {
       switch (data.type) {
         case DATA_TYPE.TEXT: {
-          const [left, top, right, bottom] = data.bounds;
+          const [left, top, right, bottom] = data.bounds.map((c) => c * 2);
           const part = await imageCrop.extract({ left, top, width: right - left, height: bottom - top }).toBuffer();
           saveImage(part, docName, data.name);
           const scan = await Tesseract.recognize(part, "rus", { logger: (m) => console.log(m) });
@@ -164,7 +162,7 @@ const parseDocument = async (docName, docImage) => {
           let table = [];
           let i = 0;
           for (let columnName of columnNames) {
-            const [left, top, right, bottom] = bounds[columnName];
+            const [left, top, right, bottom] = bounds[columnName].map((c) => c * 2);
 
             const part = await imageCrop.extract({ left, top, width: right - left, height: bottom - top }).toBuffer();
             saveImage(part, docName, `${data.name}-${columnName}-${i++}`);
