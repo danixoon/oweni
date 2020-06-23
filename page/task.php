@@ -18,7 +18,7 @@ if (isset($_SESSION["user"])) {
         break;
       }
     default:
-      echo "Выберите действие для продолжения";
+      render_task_list();
       break;
   }
 } else

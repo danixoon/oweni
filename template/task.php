@@ -1,5 +1,5 @@
 <?php
-
+require_once realpath(__DIR__ . "/../config.php");
 
 function render_task_search($items = array())
 {
@@ -33,8 +33,46 @@ function render_task_add()
     <select name="name">
       <option selected value="recruitCase"> Анекта </option>
     </select>
-    <input type="file" name="image">
+    <input type="file " name="image">
     <button type="submit"> Обработать </button>
   </form>
+  <?php
+}
+
+
+function  render_task_list()
+{
+  global $mysqli;
+  $res = $mysqli->query("SELECT * FROM `profile`");
+  while ($row = $res->fetch_assoc()) {
+
+
+  ?>
+    <div style="width:15%; height: 200px; margin:20px; padding:0;" class="white shadow">
+      <p style="text-align:left" class="text">
+      <?php
+      echo $row["id"];
+      ?>
+      </p>
+      <p>
+      <?php
+      echo $row["name"];
+      ?>
+      </p>
+      <p>
+      <?php
+      echo $row["living_address"];
+      ?>
+      </p>  
+      <p>
+      <?php
+      echo $row["private_phone"];
+      ?>
+      </p>
+    </div>
+
+
+
 <?php
+  }
 }

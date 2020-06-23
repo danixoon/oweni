@@ -101,6 +101,9 @@ blockquote,
 q {
   quotes: none;
 }
+p{
+  margin-bottom: 7px;
+}
 blockquote:before,
 blockquote:after,
 q:before,
