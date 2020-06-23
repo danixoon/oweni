@@ -69,7 +69,8 @@ CREATE TABLE `profile` (
   `id` int NOT NULL,
   `position` varchar(50) NOT NULL,
   `education` varchar(50) NOT NULL,
-  `address` varchar(100) NOT NULL,
+  `living_address` varchar(200) NOT NULL,
+  `off_address` varchar(200) NOT NULL,
   `name` varchar(50) NOT NULL,
   `birthday` date NOT NULL,
   `private_phone` varchar(50) NOT NULL,
@@ -88,6 +89,7 @@ CREATE TABLE `profile` (
 CREATE TABLE `relative` (
   `id` int NOT NULL,
   `role` varchar(50) NOT NULL,
+  `work_place` varchar(200) NOT NULL,
   `birthday` date NOT NULL,
   `name` varchar(100) NOT NULL,
   `profile_id` int NOT NULL
