@@ -9,7 +9,7 @@ const multer = require("multer");
 
 const upload = multer({ storage: multer.memoryStorage() });
 
-process.env.TESSDATA_PREFIX = path.resolve(__dirname, "./tessdata");
+// /process.env.TESSDATA_PREFIX = path.resolve(__dirname);
 
 const DATA_TYPE = {
   TEXT: "string",
@@ -91,8 +91,6 @@ const parseDocument = async (docName, docImage) => {
   const buffer = await imageCrop.toBuffer();
   await util.promisify(fs.rmdir)(path.resolve(__dirname, `./result/${docName}`), { recursive: true });
 
-  // saveImage(buffer, docName, "_image");
-
   const result = await Promise.all(
     schema.map(async (data) => {
       switch (data.type) {
@@ -142,7 +140,11 @@ const parseDocument = async (docName, docImage) => {
     })
   );
 
+  saveImage(buffer, docName, "_image");
+
   const flattenData = result.reduce((acc, data) => ({ ...acc, [data.key]: data.value }), {});
+
+  await util.promisify(fs.unlink)(path.resolve(__dirname, "./rus.traineddata"));
 
   return flattenData;
 };
