@@ -2,7 +2,7 @@
 require_once realpath(__DIR__ . "/config.php");
 require_once realpath(__DIR__ . "/template/header.php");
 require_once realpath(__DIR__ . "/template/menu.php");
-require_once realpath(__DIR__ . "/template/enterance.php");
+
 
 render_header("Главная");
 
@@ -12,7 +12,7 @@ render_header("Главная");
   <?php
   $menu_items = array();
   foreach ($PAGE_SCHEMA as $key => $value) {
-    array_push($menu_items, array("name" => $value["name"], "link" => "/index.php?page={$key}", "selected" => $PAGE === $key));
+    array_push($menu_items, array("name" => $value["name"], "link" => "/{$key}", "selected" => $PAGE === $key));
   }
   render_menu($menu_items);
   ?>
@@ -22,17 +22,11 @@ render_header("Главная");
       <div class="img-header"></div>
       <h1><?php echo $PAGE_SCHEMA[$PAGE]["name"] ?></h1>
     </div>
-         <?php  
-          if($PAGE_SCHEMA[$PAGE]["name"] == "Главная"){
-            render_enterance();
-          }
-          if($PAGE_SCHEMA[$PAGE]["name"] == "Личные дела"){
-            require_once("./template/card.php");
-          }
-         ?>/
-
-
-
+    <main class="page">
+      <?php
+      include_once realpath(__DIR__ . "/page/{$PAGE}.php");
+      ?>
+    </main>
   </div>
 </body>
 

@@ -395,22 +395,33 @@ a {
 .selected {
   background-color: #29282e;
 }
-.card{
+.card {
   border: 1px black solid;
   width: 180px;
-  height: 200px;  
+  height: 200px;
   margin: 10px;
 }
 
-.card__title{
+.card__title {
   font-style: italic;
-  font-family: Georgia, 'Times New Roman', Times, serif;
-  color:gray;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  color: gray;
 }
 
-.card__text{
-
-  font-family: Georgia, 'Times New Roman', Times, serif;
+.card__text {
+  font-family: Georgia, "Times New Roman", Times, serif;
   font-size: 12px;
 }
 
+.page {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.form {
+  display: flex;
+  flex-flow: column;
+}
