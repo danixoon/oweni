@@ -7,7 +7,7 @@ function onFormSubmit(form, body) {
 
   console.log(data);
 
-  fetch(`${url}/?${query}`, { method, body: data })
+  fetch(`${url}/?${query}`, { method, body: method !== "GET" ? data : undefined })
     .then(async (response) => {
       if (response.ok) window.location.reload();
       else {

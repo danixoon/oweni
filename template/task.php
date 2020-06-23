@@ -33,7 +33,7 @@ function render_task_add()
     <select name="name">
       <option selected value="recruitCase"> Анекта </option>
     </select>
-    <input type="file " name="image">
+    <input type="file" name="image">
     <button type="submit"> Обработать </button>
   </form>
   <?php
@@ -44,30 +44,31 @@ function  render_task_list()
 {
   global $mysqli;
   $res = $mysqli->query("SELECT * FROM `profile`");
+  echo "<div style='display: flex; flex-flow: row wrap;'>";
   while ($row = $res->fetch_assoc()) {
 
 
   ?>
-    <div style="width:15%; height: 200px; margin:20px; padding:0;" class="white shadow">
+    <div style="width:15%; height: 200px; margin:20px; padding:0; flex-basis: 250px;" class="white shadow">
       <p style="text-align:left" class="text">
-      <?php
-      echo $row["id"];
-      ?>
+        <?php
+        echo $row["id"];
+        ?>
       </p>
       <p>
-      <?php
-      echo $row["name"];
-      ?>
+        <?php
+        echo $row["name"];
+        ?>
       </p>
       <p>
-      <?php
-      echo $row["living_address"];
-      ?>
-      </p>  
+        <?php
+        echo $row["living_address"];
+        ?>
+      </p>
       <p>
-      <?php
-      echo $row["private_phone"];
-      ?>
+        <?php
+        echo $row["private_phone"];
+        ?>
       </p>
     </div>
 
@@ -75,4 +76,5 @@ function  render_task_list()
 
 <?php
   }
+  echo "</div>";
 }
