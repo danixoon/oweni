@@ -5,6 +5,14 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Attach",
+      "port": 9229,
+      "request": "attach",
+      "skipFiles": ["<node_internals>/**"],
+      "type": "pwa-node",
+      "restart": true
+    },
+    {
       "name": "Launch Program",
       "program": "${workspaceFolder}/app/index.js",
       "request": "launch",
