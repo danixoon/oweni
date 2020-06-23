@@ -44,22 +44,22 @@ const schemas = {
     },
     {
       name: "birthday",
-      bounds: [118, 128, 267, 155],
+      bounds: [118, 110, 267, 140],
       type: DATA_TYPE.TEXT,
     },
     {
       name: "citizenship",
-      bounds: [350, 128, 620, 155],
+      bounds: [350, 110, 620, 140],
       type: DATA_TYPE.TEXT,
     },
     {
       name: "education",
       // В случае, если тип данных таблица в bounds передаётся массив с границами столбцов
       bounds: {
-        name: [0, 400, 154, 486],
-        takeof: [155, 400, 296, 486],
-        release: [298, 400, 431, 486],
-        branch: [430, 400, 620, 486],
+        name: [0, 395, 154, 486],
+        takeof: [155, 395, 296, 486],
+        release: [298, 395, 431, 486],
+        branch: [430, 395, 620, 486],
         // TODO: Добавить столбцы по шаблону ниже:
         // takeof: [...]
         // release: [...]
