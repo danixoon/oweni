@@ -11,10 +11,18 @@ render_header("Главная");
 <body>
   <?php
   $menu_items = array();
+
   foreach ($PAGE_SCHEMA as $key => $value) {
-    array_push($menu_items, array("name" => $value["name"], "link" => "/{$key}", "selected" => $PAGE === $key));
+    array_push($menu_items, array(
+      "name" => $value["name"],
+      "action" => $ACTION,
+      "link" => "/{$key}",
+      "selected" =>  $SECTION === $key,
+      "group" => $value["group"]
+    ));
   }
   render_menu($menu_items);
+
   ?>
   <!--   ------------------------------------------------------------------>
   <div class="content">
@@ -24,7 +32,7 @@ render_header("Главная");
     </div>
     <main class="page">
       <?php
-      include_once realpath(__DIR__ . "/page/{$PAGE}.php");
+      include_once realpath(__DIR__ . "/page/{$SECTION}.php");
       ?>
     </main>
   </div>

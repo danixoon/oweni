@@ -425,3 +425,7 @@ a {
   display: flex;
   flex-flow: column;
 }
+
+.menu-group {
+  margin-left: 0.5rem;
+}
