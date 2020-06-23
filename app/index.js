@@ -34,37 +34,90 @@ const schemas = {
   [SCHEMA_TYPE.RECRUIT_CASE]: [
     {
       name: "lastName",
-      bounds: [70, 46, 618, 71],
+      bounds: [71, 47, 620, 71],
       type: DATA_TYPE.TEXT,
     },
     {
       name: "firstName",
-      bounds: [70, 72, 618, 92],
+      bounds: [71, 72, 618, 92],
+      type: DATA_TYPE.TEXT,
+    },
+    {
+      name: "familyName",
+      bounds: [71, 92, 618, 118],
       type: DATA_TYPE.TEXT,
     },
     {
       name: "birthday",
-      bounds: [118, 110, 267, 140],
+      bounds: [118, 118, 262, 138],
       type: DATA_TYPE.TEXT,
     },
     {
       name: "citizenship",
-      bounds: [350, 110, 620, 140],
+      bounds: [356, 119, 620, 138],
+      type: DATA_TYPE.TEXT,
+    },
+    {
+      name: "living_address",
+      bounds: [242, 156, 620, 174],
+      type: DATA_TYPE.TEXT,
+    },
+    {
+      name: "off_address",
+      bounds: [242, 184, 620, 209],
+      type: DATA_TYPE.TEXT,
+    },
+    {
+      name: "home_phone",
+      bounds: [300, 229, 420, 262],
+      type: DATA_TYPE.TEXT,
+    },
+    {
+      name: "private_phone",
+      bounds: [505, 229, 620, 262],
+      type: DATA_TYPE.TEXT,
+    },
+    {
+      name: "position",
+      bounds: [113, 271, 620, 303],
       type: DATA_TYPE.TEXT,
     },
     {
       name: "education",
       // В случае, если тип данных таблица в bounds передаётся массив с границами столбцов
       bounds: {
-        name: [0, 395, 154, 486],
-        takeof: [155, 395, 296, 486],
-        release: [298, 395, 431, 486],
-        branch: [430, 395, 620, 486],
+        name: [0, 393, 159, 482],
+        takeof: [156, 395, 296, 482],
+        release: [298, 395, 431, 482],
+        branch: [430, 395, 620, 482],
         // TODO: Добавить столбцы по шаблону ниже:
         // takeof: [...]
         // release: [...]
       },
       type: DATA_TYPE.TABLE,
+    },
+    {
+      name: "languages",
+      bounds: [174, 489, 620, 513],
+      type: DATA_TYPE.TEXT,
+    },
+    {
+      name: "relative",
+      // В случае, если тип данных таблица в bounds передаётся массив с границами столбцов
+      bounds: {
+        name: [0, 587, 286, 742],
+        work_place: [287, 587, 500, 742],
+        birthday: [500, 587, 620, 742],
+        // TODO: Добавить столбцы по шаблону ниже:
+        // takeof: [...]
+        // release: [...]
+      },
+      type: DATA_TYPE.TABLE,
+    },
+    {
+      name: "hobby",
+      bounds: [200, 745, 620, 762],
+      type: DATA_TYPE.TEXT,
     },
     // TODO: Добавить полей для данных
   ],
