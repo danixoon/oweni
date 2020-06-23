@@ -33,17 +33,17 @@ const extractValue = (text) =>
 const schemas = {
   [SCHEMA_TYPE.RECRUIT_CASE]: [
     {
-      name: "lastName",
+      name: "last_name",
       bounds: [71, 47, 620, 71],
       type: DATA_TYPE.TEXT,
     },
     {
-      name: "firstName",
+      name: "first_name",
       bounds: [71, 72, 618, 92],
       type: DATA_TYPE.TEXT,
     },
     {
-      name: "familyName",
+      name: "family_name",
       bounds: [71, 92, 618, 118],
       type: DATA_TYPE.TEXT,
     },
