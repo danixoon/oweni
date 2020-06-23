@@ -29,7 +29,7 @@ render_header("Главная");
           if($PAGE_SCHEMA[$PAGE]["name"] == "Личные дела"){
             require_once("./template/card.php");
           }
-         ?>/
+         ?>//
 
 
 
