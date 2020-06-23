@@ -395,3 +395,22 @@ a {
 .selected {
   background-color: #29282e;
 }
+.card{
+  border: 1px black solid;
+  width: 180px;
+  height: 200px;  
+  margin: 10px;
+}
+
+.card__title{
+  font-style: italic;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  color:gray;
+}
+
+.card__text{
+
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 12px;
+}
+

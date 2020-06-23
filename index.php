@@ -2,6 +2,8 @@
 require_once realpath(__DIR__ . "/config.php");
 require_once realpath(__DIR__ . "/template/header.php");
 require_once realpath(__DIR__ . "/template/menu.php");
+require_once realpath(__DIR__ . "/template/card.php");
+require_once realpath(__DIR__ . "/template/enterance.php");
 
 render_header("Главная");
 
@@ -21,24 +23,17 @@ render_header("Главная");
       <div class="img-header"></div>
       <h1><?php echo $PAGE_SCHEMA[$PAGE]["name"] ?></h1>
     </div>
-    <div class="plus shadow">
-      <div class="header-plus blue">
-        <a href="Profile.html" class="button" style="color: white;">Войдите</a>
-      </div>
-      <div class="content-plus">
-      </div>
+         <?php  
+          if($PAGE_SCHEMA[$PAGE]["name"] == "Главная"){
+            render_enterance();
+          }
+          if($PAGE_SCHEMA[$PAGE]["name"] == "Личные дела"){
+            render_card();
+          }
+         ?>
 
-    </div>
-    <p class="por">или</p>
 
-    <div class="plus shadow">
-      <div class="header-plus red">
-        <a href="Profile.html" class="button" style="color: white;">Зарегистрируйтесь</a>
-      </div>
-      <div class="content-plus">
 
-      </div>
-    </div>
   </div>
 </body>
 
