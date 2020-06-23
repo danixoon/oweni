@@ -3,11 +3,16 @@ const util = require("util");
 const fs = require("fs");
 const sharp = require("sharp");
 const path = require("path");
+const express = require("express");
+const bodyParser = require("body-parser");
+const multer = require("multer");
+
+const upload = multer({ storage: multer.memoryStorage() });
 
 process.env.TESSDATA_PREFIX = path.resolve(__dirname, "./tessdata");
 
 const DATA_TYPE = {
-  STRING: "string",
+  TEXT: "string",
   TABLE: "table",
 };
 
@@ -25,17 +30,17 @@ const extractValue = (text) =>
     })
     .join("");
 
-const schema = {
+const schemas = {
   [SCHEMA_TYPE.RECRUIT_CASE]: [
     {
       name: "lastName",
       bounds: [70, 46, 618, 71],
-      type: DATA_TYPE.STRING,
+      type: DATA_TYPE.TEXT,
     },
     {
       name: "firstName",
       bounds: [70, 72, 618, 92],
-      type: DATA_TYPE.STRING,
+      type: DATA_TYPE.TEXT,
     },
     {
       name: "education",
@@ -65,74 +70,95 @@ const saveImage = async (buffer, schemaName, fieldName) => {
   }
 };
 
-const init = async () => {
-  const imageName = SCHEMA_TYPE.RECRUIT_CASE;
-  const image = await util.promisify(fs.readFile)(path.resolve(__dirname, `./test/${imageName}.png`));
-  const imageCrop = sharp(image)
+const parseDocument = async (docName, docImage) => {
+  const schema = schemas[docName];
+  const imageCrop = sharp(docImage)
     .resize({ width: 1240 / 2, height: 1754 / 2, fit: "contain" })
     .trim(33);
 
   const buffer = await imageCrop.toBuffer();
-  saveImage(buffer, imageName, "_image");
+  await util.promisify(fs.rmdir)(path.resolve(__dirname, `./result/${docName}`), { recursive: true });
+
+  // saveImage(buffer, docName, "_image");
 
   const result = await Promise.all(
-    Object.entries(schema).map(async ([schemaName, schema]) => ({
-      key: schemaName,
-      value: await Promise.all(
-        schema.map(async (data) => {
-          switch (data.type) {
-            case DATA_TYPE.STRING: {
-              const [left, top, right, bottom] = data.bounds;
-              const part = await imageCrop.extract({ left, top, width: right - left, height: bottom - top }).toBuffer();
-              saveImage(part, imageName, data.name);
-              const scan = await Tesseract.recognize(part, "rus");
+    schema.map(async (data) => {
+      switch (data.type) {
+        case DATA_TYPE.TEXT: {
+          const [left, top, right, bottom] = data.bounds;
+          const part = await imageCrop.extract({ left, top, width: right - left, height: bottom - top }).toBuffer();
+          saveImage(part, docName, data.name);
+          const scan = await Tesseract.recognize(part, "rus");
 
-              return {
-                key: data.name,
-                value: extractValue(scan.data.text),
-              };
-            }
-            case DATA_TYPE.TABLE: {
-              const { bounds } = data;
-              const columnNames = Object.keys(bounds);
-              let table = [];
-              let i = 0;
-              for (let columnName of columnNames) {
-                const [left, top, right, bottom] = bounds[columnName];
+          return {
+            key: data.name,
+            value: extractValue(scan.data.text),
+          };
+        }
+        case DATA_TYPE.TABLE: {
+          const { bounds } = data;
+          const columnNames = Object.keys(bounds);
+          let table = [];
+          let i = 0;
+          for (let columnName of columnNames) {
+            const [left, top, right, bottom] = bounds[columnName];
 
-                const part = await imageCrop.extract({ left, top, width: right - left, height: bottom - top }).toBuffer();
-                saveImage(part, imageName, `${data.name}-${columnName}-${i++}`);
-                const scan = await Tesseract.recognize(part, "rus");
-                table.push(
-                  scan.data.text
-                    .split("\n")
-                    .map((v) => extractValue(v))
-                    .filter((value) => value)
-                );
-              }
-
-              const rows = new Array(bounds.length);
-              table.forEach((column, i) => {
-                column.forEach((cell, r) => {
-                  rows[r] = { ...(rows[r] || {}), [columnNames[i]]: cell };
-                });
-              });
-
-              return {
-                key: data.name,
-                value: rows,
-              };
-            }
+            const part = await imageCrop.extract({ left, top, width: right - left, height: bottom - top }).toBuffer();
+            saveImage(part, docName, `${data.name}-${columnName}-${i++}`);
+            const scan = await Tesseract.recognize(part, "rus");
+            table.push(
+              scan.data.text
+                .split("\n")
+                .map((v) => extractValue(v))
+                .filter((value) => value)
+            );
           }
-        })
-      ),
-    })),
-    {}
+
+          const rows = new Array(bounds.length);
+          table.forEach((column, i) => {
+            column.forEach((cell, r) => {
+              rows[r] = { ...(rows[r] || {}), [columnNames[i]]: cell };
+            });
+          });
+
+          return {
+            key: data.name,
+            value: rows,
+          };
+        }
+      }
+    })
   );
 
-  const flattenData = result.reduce((acc, data) => ({ ...acc, [data.key]: data.value.reduce((acc, data) => ({ ...acc, [data.key]: data.value }), {}) }), {});
+  const flattenData = result.reduce((acc, data) => ({ ...acc, [data.key]: data.value }), {});
 
-  console.log(util.inspect(flattenData, false, null, true));
+  return flattenData;
+};
+
+const init = () => {
+  const app = express();
+
+  app.use(bodyParser.json());
+
+  app.post("/api/document/parse", upload.single("image"), async (req, res, next) => {
+    const { name } = req.query;
+    const { file } = req;
+
+    if (!name) return res.status(400).send({ message: "Имя документа должно быть указано" });
+    if (!schemas[name]) return res.status(400).send({ message: "Неверное имя документа" });
+    try {
+      const docData = await parseDocument(name, file.buffer);
+
+      console.log(`document <${name}> parse:`, util.inspect(docData, false, null, true));
+      res.send(docData);
+    } catch (err) {
+      res.status(500).send({ message: "Некорректное изображение" });
+    }
+  });
+
+  app.listen(5005, () => {
+    console.log("server listening");
+  });
 };
 
 init();
