@@ -1,13 +1,32 @@
 <?php
+require_once(realpath(dirname(__FILE__) . "/../config.php"));
 
-function render_card()
-{
+
+    $i = 1;
+    $render_card = function ($j) use ($mysqli, $res_) {
+        $res_ = $mysqli->query("SELECT * FROM `profile` WHERE id=${j}");
+        $ids = mysqli_fetch_assoc($res_);
+
 ?>
-    <article class="card shadow">
-        <h2>ФИО/ИД</h2>
-        <p class="card__text">ааа</p>
-    </article>
+        <article class="card shadow">
+            <h2><?php echo ($ids['name']); ?> / <?php echo ($j); ?></h2>
+            <h2 class="mtext">true</h2>
+        </article>
+
+        
 <?php
-}
+    };
 
+    while (true) {
+        if ($i == $result->num_rows + 1) {
+            break;
+        }
+        $render_card($i);
+        $i++;
+    }
 ?>
+
+<!-- echo ('<article class="card shadow">'/);
+        echo ('<h2><?php echo ($ids[`name`]); ?> / <?php echo ($j); ?></h2>');
+        echo ('<h2 class="card__text">true</h2>');
+        echo ('</article>'); -->

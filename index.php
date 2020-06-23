@@ -2,7 +2,6 @@
 require_once realpath(__DIR__ . "/config.php");
 require_once realpath(__DIR__ . "/template/header.php");
 require_once realpath(__DIR__ . "/template/menu.php");
-require_once realpath(__DIR__ . "/template/card.php");
 require_once realpath(__DIR__ . "/template/enterance.php");
 
 render_header("Главная");
@@ -28,9 +27,9 @@ render_header("Главная");
             render_enterance();
           }
           if($PAGE_SCHEMA[$PAGE]["name"] == "Личные дела"){
-            render_card();
+            require_once("./template/card.php");
           }
-         ?>
+         ?>/
 
 
 
