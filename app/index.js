@@ -44,16 +44,13 @@ const schemas = {
     },
     {
       name: "birthday",
-      bounds: [118, 125, 267, 155],
-      type: DATA_TYPE.STRING,
-    }, 
-    {
-      name: "citizenship",
-      bounds: [350, 125, 620, 155],
-      type: DATA_TYPE.STRING,
+      bounds: [118, 128, 267, 155],
+      type: DATA_TYPE.TEXT,
     },
     {
-
+      name: "citizenship",
+      bounds: [350, 128, 620, 155],
+      type: DATA_TYPE.TEXT,
     },
     {
       name: "education",
@@ -62,16 +59,13 @@ const schemas = {
         name: [0, 400, 154, 486],
         takeof: [155, 400, 296, 486],
         release: [298, 400, 431, 486],
-        branch: [430, 400, 620, 486]
+        branch: [430, 400, 620, 486],
         // TODO: Добавить столбцы по шаблону ниже:
         // takeof: [...]
         // release: [...]
       },
       type: DATA_TYPE.TABLE,
     },
-    {
-      
-    }
     // TODO: Добавить полей для данных
   ],
 };
