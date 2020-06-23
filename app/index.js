@@ -98,7 +98,7 @@ const parseDocument = async (docName, docImage) => {
           const [left, top, right, bottom] = data.bounds;
           const part = await imageCrop.extract({ left, top, width: right - left, height: bottom - top }).toBuffer();
           saveImage(part, docName, data.name);
-          const scan = await Tesseract.recognize(part, "rus");
+          const scan = await Tesseract.recognize(part, "rus", { logger: (m) => console.log(m) });
 
           return {
             key: data.name,
@@ -115,7 +115,7 @@ const parseDocument = async (docName, docImage) => {
 
             const part = await imageCrop.extract({ left, top, width: right - left, height: bottom - top }).toBuffer();
             saveImage(part, docName, `${data.name}-${columnName}-${i++}`);
-            const scan = await Tesseract.recognize(part, "rus");
+            const scan = await Tesseract.recognize(part, "rus", { logger: (m) => console.log(m) });
             table.push(
               scan.data.text
                 .split("\n")
@@ -170,7 +170,7 @@ const init = () => {
     }
   });
 
-  app.listen(5005, () => {
+  app.listen(5050, () => {
     console.log("server listening");
   });
 };
