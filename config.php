@@ -16,7 +16,7 @@ $PAGE_SCHEMA = array(
 $SECTION = explode('/', $PAGE)[0];
 $ACTION = explode("/", $PAGE)[1];
 
-$mysqli = new mysqli("localhost", "root", "root", "oweni");
+$mysqli = new mysqli("localhost", "root", "", "oweni");
 
 function start_with($string, $predicate)
 {
@@ -34,6 +34,11 @@ function send_post($url, $payload)
     $out = curl_exec($curl);
     curl_close($curl);
     $err = curl_error($curl);
-    print_r($err);
+    return $out;
   }
+}
+
+function qu($var)
+{
+  return "'$var'";
 }

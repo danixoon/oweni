@@ -68,7 +68,6 @@ CREATE TABLE `medical` (
 CREATE TABLE `profile` (
   `id` int NOT NULL,
   `position` varchar(50) NOT NULL,
-  `education` varchar(50) NOT NULL,
   `living_address` varchar(200) NOT NULL,
   `off_address` varchar(200) NOT NULL,
   `name` varchar(50) NOT NULL,
