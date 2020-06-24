@@ -39,57 +39,57 @@ const schemas = {
     },
     {
       name: "first_name",
-      bounds: [71, 72, 618, 92],
+      bounds: [71, 72, 620, 92],
       type: DATA_TYPE.TEXT,
     },
     {
       name: "family_name",
-      bounds: [71, 92, 618, 118],
+      bounds: [71, 92, 620, 118],
       type: DATA_TYPE.TEXT,
     },
     {
       name: "birthday",
-      bounds: [118, 118, 262, 138],
+      bounds: [120, 108, 278, 138],
       type: DATA_TYPE.TEXT,
     },
     {
       name: "citizenship",
-      bounds: [356, 119, 620, 138],
+      bounds: [364, 112, 620, 141],
       type: DATA_TYPE.TEXT,
     },
     {
       name: "living_address",
-      bounds: [242, 156, 620, 174],
+      bounds: [256, 150, 620, 175],
       type: DATA_TYPE.TEXT,
     },
     {
       name: "off_address",
-      bounds: [242, 184, 620, 209],
+      bounds: [260, 187, 620, 209],
       type: DATA_TYPE.TEXT,
     },
     {
       name: "home_phone",
-      bounds: [300, 229, 420, 262],
+      bounds: [300, 221, 425, 269],
       type: DATA_TYPE.TEXT,
     },
     {
       name: "private_phone",
-      bounds: [505, 229, 620, 262],
+      bounds: [510, 229, 620, 269],
       type: DATA_TYPE.TEXT,
     },
     {
       name: "position",
-      bounds: [113, 271, 620, 303],
+      bounds: [112, 270, 620, 310],
       type: DATA_TYPE.TEXT,
     },
     {
       name: "education",
       // В случае, если тип данных таблица в bounds передаётся массив с границами столбцов
       bounds: {
-        name: [0, 393, 159, 482],
-        takeof: [156, 395, 296, 482],
-        release: [298, 395, 431, 482],
-        branch: [430, 395, 620, 482],
+        name: [0, 395, 150, 480],
+        takeof: [155, 395, 310, 480],
+        release: [310, 395, 439, 480],
+        branch: [438, 395, 620, 480],
         // TODO: Добавить столбцы по шаблону ниже:
         // takeof: [...]
         // release: [...]
@@ -98,16 +98,16 @@ const schemas = {
     },
     {
       name: "languages",
-      bounds: [174, 489, 620, 513],
+      bounds: [178, 482, 620, 514],
       type: DATA_TYPE.TEXT,
     },
     {
       name: "relative",
       // В случае, если тип данных таблица в bounds передаётся массив с границами столбцов
       bounds: {
-        name: [0, 587, 286, 742],
-        work_place: [287, 587, 500, 742],
-        birthday: [500, 587, 620, 742],
+        name: [0, 596, 286, 755],
+        work_place: [219, 596, 535, 755],
+        birthday: [535, 596, 620, 755],
         // TODO: Добавить столбцы по шаблону ниже:
         // takeof: [...]
         // release: [...]
@@ -116,7 +116,7 @@ const schemas = {
     },
     {
       name: "hobby",
-      bounds: [200, 745, 620, 762],
+      bounds: [217, 755, 620, 775],
       type: DATA_TYPE.TEXT,
     },
     // TODO: Добавить полей для данных
