@@ -5,33 +5,26 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Launch Test",
+      "program": "${workspaceFolder}/app/test.js",
+      "request": "launch",
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"],
+      "type": "pwa-node"
+    },
+    {
       "name": "Attach",
-      "port": 5050,
+      "port": 9229,
       "request": "attach",
       "skipFiles": ["<node_internals>/**"],
       "type": "pwa-node",
       "restart": true
     },
-    {
-      "name": "Launch Program",
-      "program": "${workspaceFolder}/app/index.js",
-      "request": "launch",
-      "skipFiles": ["<node_internals>/**"],
-      "type": "pwa-node",
-      "console": "integratedTerminal"
-    },
+
     {
       "name": "Listen for XDebug",
       "type": "php",
       "request": "launch",
-      "port": 9000
-    },
-    {
-      "name": "Launch currently open script",
-      "type": "php",
-      "request": "launch",
-      "program": "${file}",
-      "cwd": "${fileDirname}",
       "port": 9000
     }
   ]
