@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "start": "node ./index.js",
-    "start:dev": "nodemon --inspect ./index.js 9229"
+    "start:dev": "nodemon --inspect ./index.js 9229",
+    "test": "nodemon --inspect ./test.js 9229"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
