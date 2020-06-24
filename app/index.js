@@ -1,4 +1,4 @@
-const Tesseract = require("tesseract.js");
+const { createWorker } = require("tesseract.js");
 const util = require("util");
 const fs = require("fs");
 const sharp = require("sharp");
@@ -25,9 +25,10 @@ const extractValue = (text) =>
   text
     .split("")
     .filter((char) => {
-      // const c = char.charCodeAt(0);
-      // const ok = c === " " || (c >= 1024 && c <= 1279) || (c >= 48 && c <= 57);
-      return true;
+
+      const c = char.charCodeAt(0);
+
+      return ",.'\"-".split("").includes(c) || c === " " || (c >= 1024 && c <= 1279) || (c >= 48 && c <= 57);
     })
     .join("");
 
@@ -139,22 +140,51 @@ const saveImage = async (buffer, schemaName, fieldName) => {
 const parsingQueue = new Queue({ concurrency: 4 });
 
 const parseDocument = async (docName, docImage) => {
-  const trainedDataPath = path.resolve(__dirname, "./rus.traineddata");
-  if (fs.existsSync(trainedDataPath))
-    await util.promisify(fs.unlink)(trainedDataPath);
+
+  const clearThis = async () => {
+    const trainedDataPath = path.resolve(__dirname, "./rus.traineddata");
+    if (fs.existsSync(trainedDataPath))
+      await util.promisify(fs.unlink)(trainedDataPath);
+  }
+
   const schema = schemas[docName];
   const imageCrop = sharp(docImage).resize({ width: 1240, height: 1754, fit: "contain" }).trim(33);
 
   const buffer = await imageCrop.toBuffer();
   await util.promisify(fs.rmdir)(path.resolve(__dirname, `./result/${docName}`), { recursive: true });
 
-  const result = schema.map(async (data) => {
+  // await clearThis();
+
+  const result = await Promise.all(schema.map(async (data) => {
     switch (data.type) {
       case DATA_TYPE.TEXT: {
         const [left, top, right, bottom] = data.bounds.map((c) => c * 2);
         const part = await imageCrop.extract({ left, top, width: right - left, height: bottom - top }).toBuffer();
         saveImage(part, docName, data.name);
-        const scan = await parsingQueue.add(async () => await Tesseract.recognize(part, "rus", { logger: (m) => console.log(m) }));
+        const scan = await parsingQueue.add(async () => {
+          const worker = createWorker();
+          await worker.load();
+          await worker.loadLanguage("rus");
+          await worker.initialize("rus");
+
+          // await clearThis();
+          console.log("reconizing: ", data.name);
+          while (true) {
+            try {
+              const result = await worker.recognize(part, "rus");
+              console.log("reconizing complete: ", data.name);
+              await worker.terminate();
+              return result;
+            } catch (err) {
+              console.log("oof dats died: ", data.name);
+            }
+          }
+
+
+
+
+          // await clearThis();
+        });
 
         return {
           key: data.name,
@@ -171,7 +201,29 @@ const parseDocument = async (docName, docImage) => {
 
           const part = await imageCrop.extract({ left, top, width: right - left, height: bottom - top }).toBuffer();
           saveImage(part, docName, `${data.name}-${columnName}-${i++}`);
-          const scan = await parsingQueue.add(async () => await Tesseract.recognize(part, "rus", { logger: (m) => console.log(m) }));
+          const scan = await parsingQueue.add(async () => {
+            const worker = createWorker();
+            await worker.load();
+            await worker.loadLanguage("rus");
+            await worker.initialize("rus");
+  
+            // await clearThis();
+            console.log("reconizing: ", data.name);
+            while (true) {
+              try {
+                const result = await worker.recognize(part, "rus");
+                console.log("reconizing complete: ", data.name);
+                await worker.terminate();
+                return result;
+              } catch (err) {
+                console.log("oof dats died: ", data.name);
+              }
+            }
+  
+
+
+            // await clearThis();
+          });
           table.push(
             scan.data.text
               .split("\n")
@@ -193,7 +245,11 @@ const parseDocument = async (docName, docImage) => {
         };
       }
     }
-  });
+  }));
+
+  console.log("reconizing complete.");
+
+  // await clearThis();
 
   saveImage(buffer, docName, "_image");
 
