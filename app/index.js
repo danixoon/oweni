@@ -136,7 +136,9 @@ const saveImage = async (buffer, schemaName, fieldName) => {
 };
 
 const parseDocument = async (docName, docImage) => {
-  await util.promisify(fs.unlink)(path.resolve(__dirname, "./rus.traineddata"));
+  const trainedDataPath = path.resolve(__dirname, "./rus.traineddata");
+  if (fs.existsSync(trainedDataPath))
+    await util.promisify(fs.unlink)(trainedDataPath);
   const schema = schemas[docName];
   const imageCrop = sharp(docImage).resize({ width: 1240, height: 1754, fit: "contain" }).trim(33);
 
@@ -204,6 +206,11 @@ const init = () => {
 
   app.use(bodyParser.json());
 
+  app.use((req, res, next) => {
+    console.log("Request: ", req.url);
+    next();
+  })
+
   app.post("/api/document/parse", upload.single("image"), async (req, res, next) => {
     const { name } = req.query;
     const { file } = req;
@@ -216,7 +223,7 @@ const init = () => {
       console.log(`document <${name}> parse:`, util.inspect(docData, false, null, true));
       res.send(docData);
     } catch (err) {
-      res.status(500).send({ message: "Некорректное изображение" });
+      res.status(500).send({ message: "Некорректное изображение", error: err });
     }
   });
 
