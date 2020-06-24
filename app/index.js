@@ -139,7 +139,7 @@ const parseDocument = async (docName, docImage) => {
   const trainedDataPath = path.resolve(__dirname, "./rus.traineddata");
   if (fs.existsSync(trainedDataPath))
     await util.promisify(fs.unlink)(trainedDataPath);
-  const schema = schemas[docName];/
+  const schema = schemas[docName];
   const imageCrop = sharp(docImage).resize({ width: 1240, height: 1754, fit: "contain" }).trim(33);
 
   const buffer = await imageCrop.toBuffer();
