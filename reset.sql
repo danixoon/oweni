@@ -1,3 +1,5 @@
+DROP DATABASE IF EXIST oweni;
+CREATE DATABASE IF NOT EXIST oweni;
 USE oweni;
 
 

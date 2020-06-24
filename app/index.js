@@ -6,7 +6,7 @@ const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
 const multer = require("multer");
-const queue = require("queue");
+const { default: Queue } = require("p-queue");
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -136,7 +136,7 @@ const saveImage = async (buffer, schemaName, fieldName) => {
   }
 };
 
-const parsingQueue = queue({ concurrency: 4 });
+const parsingQueue = new Queue({ concurrency: 4 });
 
 const parseDocument = async (docName, docImage) => {
   const trainedDataPath = path.resolve(__dirname, "./rus.traineddata");
