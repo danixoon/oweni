@@ -9,12 +9,15 @@ function onFormSubmit(form, body) {
 
   fetch(`${url}/?${query}`, { method, body: method !== "GET" ? data : undefined })
     .then(async (response) => {
-      if (response.ok) window.location.reload();
+      if (response.ok) {
+        console.log(await response.text());
+        // window.location.reload();
+      }
       else {
         let responseData = "";
         try {
           responseData = await response.json();
-        } catch (err) {}
+        } catch (err) { }
         alert(`Ошибка ${response.status}: ` + responseData || "");
       }
     })

@@ -11,6 +11,7 @@ $image = $_FILES["image"];
 $response = send_post("localhost:5050/api/document/parse?name=$name", array("image" => new CURLFile($image["tmp_name"], $image["type"], $image["name"])));
 if ($response) {
   $data = json_decode($response, true);
+  print_r($response);
   $mapper = array(
     "name" => function () use ($data) {
       return qu($data["last_name"] . " " . $data["first_name"] . " " . $data["family_name"]);
@@ -50,8 +51,7 @@ if ($response) {
 
   $profile_result = $mysqli->query($insert_profile);
   if (!$profile_result) {
-    http_response_code(500);
-    echo "Ошибка добавления профиля.";
+    send_error(500, "Ошибка добавления профиля", ["mysql" => $mysqli->error, "query" => $insert_profile]);
     return;
   }
 
@@ -84,14 +84,12 @@ if ($response) {
   $insert_education_result = $mysqli->query("$insert_education");
 
   if (!$insert_relative_result) {
-    http_response_code(500);
-    echo "Ошибка добавления родственных связей.";
+    send_error(500, "Ошибка добавления родственных связей.", ["mysql" => $mysqli->error, "query" => $insert_relative]);
     return;
   }
 
   if (!$insert_education_result) {
-    http_response_code(500);
-    echo "Ошибка добавления образования.";
+    send_error(500, "Ошибка добавления образования.", ["mysql" => $mysqli->error, "query" => $insert_education]);
     return;
   }
 
