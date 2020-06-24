@@ -136,6 +136,7 @@ const saveImage = async (buffer, schemaName, fieldName) => {
 };
 
 const parseDocument = async (docName, docImage) => {
+  await util.promisify(fs.unlink)(path.resolve(__dirname, "./rus.traineddata"));
   const schema = schemas[docName];
   const imageCrop = sharp(docImage).resize({ width: 1240, height: 1754, fit: "contain" }).trim(33);
 
@@ -194,8 +195,6 @@ const parseDocument = async (docName, docImage) => {
   saveImage(buffer, docName, "_image");
 
   const flattenData = result.reduce((acc, data) => ({ ...acc, [data.key]: data.value }), {});
-
-  await util.promisify(fs.unlink)(path.resolve(__dirname, "./rus.traineddata"));
 
   return flattenData;
 };
