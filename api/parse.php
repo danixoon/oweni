@@ -8,6 +8,12 @@ if (!$_SESSION["user"]) return http_response_code(403);
 $name = $_REQUEST["name"];
 $image = $_FILES["image"];
 
+function parse_date($date)
+{
+  $exploded = explode(".", $date);
+  return $exploded[2] . "-" . $exploded[1] . "-" . $exploded[0];
+}
+
 $response = send_post("localhost:5050/api/document/parse?name=$name", array("image" => new CURLFile($image["tmp_name"], $image["type"], $image["name"])));
 if ($response) {
   $data = json_decode($response, true);
@@ -16,7 +22,7 @@ if ($response) {
     "name" => function () use ($data) {
       return qu($data["last_name"] . " " . $data["first_name"] . " " . $data["family_name"]);
     },
-    "birthday" => qu($data["birthday"]),
+    "birthday" => qu(parse_date($data["birthday"])),
     "citizenship" =>  qu($data["citizenship"]),
     "living_address" =>  qu($data["living_address"]),
     "off_address" =>   qu($data["official_address"]),
@@ -61,8 +67,8 @@ if ($response) {
     return "(" . implode(", ",  [
       "NULL",
       qu($edu["name"]),
-      qu($edu["income"]),
-      qu($edu["release"]),
+      qu(parse_date($edu["income"])),
+      qu(parse_date($edu["release"])),
       qu($edu["branch"]),
       $profile_id
     ]) . ")";
@@ -73,7 +79,7 @@ if ($response) {
     return "(" . implode(", ",  [
       "NULL",
       qu("Родственник"),
-      qu($rel["birthday"]),
+      qu(parse_date($rel["birthday"])),
       qu($rel["name"]),
       $profile_id
     ]) . ")";
