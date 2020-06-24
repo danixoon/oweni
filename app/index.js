@@ -6,6 +6,7 @@ const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
 const multer = require("multer");
+const queue = require("queue");
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -135,64 +136,63 @@ const saveImage = async (buffer, schemaName, fieldName) => {
   }
 };
 
+const parsingQueue = queue({ concurrency: 4 });
+
 const parseDocument = async (docName, docImage) => {
   const trainedDataPath = path.resolve(__dirname, "./rus.traineddata");
-  if (fs.existsSync(trainedDataPath))
-    await util.promisify(fs.unlink)(trainedDataPath);
+  if (fs.existsSync(trainedDataPath)) await util.promisify(fs.unlink)(trainedDataPath);
   const schema = schemas[docName];
   const imageCrop = sharp(docImage).resize({ width: 1240, height: 1754, fit: "contain" }).trim(33);
 
   const buffer = await imageCrop.toBuffer();
   await util.promisify(fs.rmdir)(path.resolve(__dirname, `./result/${docName}`), { recursive: true });
 
-  const result = await Promise.all(
-    schema.map(async (data) => {
-      switch (data.type) {
-        case DATA_TYPE.TEXT: {
-          const [left, top, right, bottom] = data.bounds.map((c) => c * 2);
-          const part = await imageCrop.extract({ left, top, width: right - left, height: bottom - top }).toBuffer();
-          saveImage(part, docName, data.name);
-          const scan = await Tesseract.recognize(part, "rus", { logger: (m) => console.log(m) });
+  const result = schema.map(async (data) => {
+    switch (data.type) {
+      case DATA_TYPE.TEXT: {
+        const [left, top, right, bottom] = data.bounds.map((c) => c * 2);
+        const part = await imageCrop.extract({ left, top, width: right - left, height: bottom - top }).toBuffer();
+        saveImage(part, docName, data.name);
+        const scan = await parsingQueue.add(async () => await Tesseract.recognize(part, "rus", { logger: (m) => console.log(m) }));
 
-          return {
-            key: data.name,
-            value: extractValue(scan.data.text),
-          };
-        }
-        case DATA_TYPE.TABLE: {
-          const { bounds } = data;
-          const columnNames = Object.keys(bounds);
-          let table = [];
-          let i = 0;
-          for (let columnName of columnNames) {
-            const [left, top, right, bottom] = bounds[columnName].map((c) => c * 2);
-
-            const part = await imageCrop.extract({ left, top, width: right - left, height: bottom - top }).toBuffer();
-            saveImage(part, docName, `${data.name}-${columnName}-${i++}`);
-            const scan = await Tesseract.recognize(part, "rus", { logger: (m) => console.log(m) });
-            table.push(
-              scan.data.text
-                .split("\n")
-                .map((v) => extractValue(v))
-                .filter((value) => value)
-            );
-          }
-
-          const rows = new Array(bounds.length);
-          table.forEach((column, i) => {
-            column.forEach((cell, r) => {
-              rows[r] = { ...(rows[r] || {}), [columnNames[i]]: cell };
-            });
-          });
-
-          return {
-            key: data.name,
-            value: rows,
-          };
-        }
+        return {
+          key: data.name,
+          value: extractValue(scan.data.text),
+        };
       }
-    })
-  );
+      case DATA_TYPE.TABLE: {
+        const { bounds } = data;
+        const columnNames = Object.keys(bounds);
+        let table = [];
+        let i = 0;
+        for (let columnName of columnNames) {
+          const [left, top, right, bottom] = bounds[columnName].map((c) => c * 2);
+
+          const part = await imageCrop.extract({ left, top, width: right - left, height: bottom - top }).toBuffer();
+          saveImage(part, docName, `${data.name}-${columnName}-${i++}`);
+          const scan = await parsingQueue.add(async () => await Tesseract.recognize(part, "rus", { logger: (m) => console.log(m) }));
+          table.push(
+            scan.data.text
+              .split("\n")
+              .map((v) => extractValue(v))
+              .filter((value) => value)
+          );
+        }
+
+        const rows = new Array(bounds.length);
+        table.forEach((column, i) => {
+          column.forEach((cell, r) => {
+            rows[r] = { ...(rows[r] || {}), [columnNames[i]]: cell };
+          });
+        });
+
+        return {
+          key: data.name,
+          value: rows,
+        };
+      }
+    }
+  });
 
   saveImage(buffer, docName, "_image");
 
@@ -209,7 +209,7 @@ const init = () => {
   app.use((req, res, next) => {
     console.log("Request: ", req.url);
     next();
-  })
+  });
 
   app.post("/api/document/parse", upload.single("image"), async (req, res, next) => {
     const { name } = req.query;
