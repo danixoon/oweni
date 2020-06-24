@@ -124,14 +124,12 @@ const saveImage = async (buffer, schemaName, fieldName) => {
   }
 };
 
-const parsingQueue = new Queue({ concurrency: 1 });
+const parsingQueue = new Queue({ concurrency: 4 });
 const trainLoadersQueue = new Queue({ concurrency: 1 });
 
 const parseDocument = async (docName, docImage) => {
   const schema = schemas[docName];
   const imageCrop = sharp(docImage).resize({ width: 1240, height: 1754, fit: "contain" }).trim(33);
-
-  
 
   const buffer = await imageCrop.toBuffer();
   await util.promisify(fs.rmdir)(path.resolve(__dirname, `./result/${docName}`), { recursive: true });
@@ -202,9 +200,14 @@ const parseDocument = async (docName, docImage) => {
             });
           });
 
+          const filteredRows = rows.filter((row) => {
+            const rowKeys = Object.keys(row);
+            return columnNames.every((columnName) => rowKeys.includes(columnName));
+          });
+
           return {
             key: data.name,
-            value: rows,
+            value: filteredRows,
           };
         }
       }
