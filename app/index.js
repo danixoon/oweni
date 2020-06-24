@@ -29,11 +29,13 @@ const init = () => {
     if (!name) return res.status(400).send({ message: "Имя документа должно быть указано" });
     if (!schemas[name]) return res.status(400).send({ message: "Неверное имя документа" });
     try {
+      console.log("request document parsing..");
       const docData = await parseDocument(name, file.buffer);
 
       console.log(`document <${name}> parse:`, util.inspect(docData, false, null, true));
       res.send(docData);
     } catch (err) {
+      console.log("document parsing error:", err);
       res.status(500).send({ message: "Некорректное изображение", error: err });
     }
   });
