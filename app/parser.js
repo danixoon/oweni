@@ -76,7 +76,7 @@ const schemas = {
       // В случае, если тип данных таблица в bounds передаётся массив с границами столбцов
       bounds: {
         name: [0, 395, 150, 480],
-        takeof: [155, 395, 310, 480],
+        income: [155, 395, 310, 480],
         release: [310, 395, 439, 480],
         branch: [438, 395, 620, 480],
         // TODO: Добавить столбцы по шаблону ниже:
@@ -124,7 +124,7 @@ const saveImage = async (buffer, schemaName, fieldName) => {
   }
 };
 
-const parsingQueue = new Queue({ concurrency: 3 });
+const parsingQueue = new Queue({ concurrency: 1 });
 const trainLoadersQueue = new Queue({ concurrency: 1 });
 
 const parseDocument = async (docName, docImage) => {
