@@ -11,19 +11,18 @@ function onFormSubmit(form, redirect) {
     .then(async (response) => {
       if (response.ok) {
         console.log(await response.text());
-        if (redirect) window.location.href = redirect
+        if (redirect) window.location.href = redirect;
         else window.location.reload();
-      }
-      else {
+      } else {
         let responseData = "";
         try {
           responseData = await response.json();
         } catch (err) {
           console.error(err);
         }
-        let errorMessage = `Ошибка ${response.status}: ` + responseData || "";
-        console.error(errorMessage);
-        alert(`Ошибка ${response.status}: ` + responseData || "");
+        let errorMessage = `Ошибка ${response.status}: ` + responseData.message || "";
+        console.error(errorMessage, response);
+        alert(`Ошибка ${response.status}: ` + responseData.message || "");
       }
     })
     .catch((response) => console.error(response));

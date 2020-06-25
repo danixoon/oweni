@@ -18,8 +18,7 @@ if (!$result) {
 
 $user = $result->fetch_assoc();
 if (!$user) {
-  return http_response_code(403);
- 
+  return send_error(403, "Неверные учётные данные");
 }
 
 $_SESSION["user"] = $user;
