@@ -4,11 +4,11 @@ require_once realpath(__DIR__ . "/../config.php");
 function render_task_search($items = array())
 {
 ?>
-  <form class="task-search__form" onsubmit="return onFormSubmit(this)">
-    <label>ФИО</label>
-    <input name="ФИО">
-    <label>Категория</label>
-    <input name="Категория">
+  <form class="task-search__form">
+    <label>
+      ФИО
+      <input value="<?php echo $_GET["name"] ?>" name="name">
+    </label>
     <button type="submit"> Найти </button>
   </form>
   <table class="task-search__table">
@@ -42,7 +42,7 @@ function render_task_add()
 }
 
 
-function  render_task_list()
+function render_task_list()
 {
   global $mysqli;
   $res = $mysqli->query("SELECT * FROM `profile`");
@@ -189,18 +189,5 @@ function  render_task_list()
         ?>
       </p>
     </div>
-
-
-
-<?php
-  }
-  echo "</div>";
-  function Logout()
-  {
-
-    if (isset($_REQUEST["user"])) {
-      $_SESSION["user"] = null;
-      session_destroy();
-    }
-  }
-}
+<?php }
+} ?>

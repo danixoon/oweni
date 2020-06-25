@@ -18,7 +18,11 @@ function onFormSubmit(form, redirect) {
         let responseData = "";
         try {
           responseData = await response.json();
-        } catch (err) { }
+        } catch (err) {
+          console.error(err);
+        }
+        let errorMessage = `Ошибка ${response.status}: ` + responseData || "";
+        console.error(errorMessage);
         alert(`Ошибка ${response.status}: ` + responseData || "");
       }
     })
