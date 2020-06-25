@@ -65,49 +65,58 @@ const mapper = {
 const parser = async ({ docName, docImage, trainLoadersQueue, from = 1, extractValue, saveImage, parsingQueue, DATA_TYPE, schemas }) => {
   // const to = 33;
 
-  const width = 130;
-  const maxWidth = 612;
+  const width = 60;
+  const maxWidth = 623;
 
   let image = sharp(docImage).trim().resize(maxWidth);
   let imageBuffer = await image.toBuffer();
 
   const metadata = await sharp(imageBuffer).metadata();
 
+  const scanRegion = async (left, width, name, filter) => {
+    const part = await image
+      .extract({ left, top: 0, width, height: metadata.height })
+      .extend({
+        bottom: 5,
+        left: 5,
+        top: 5,
+        right: 5,
+        background: {
+          alpha: 1,
+          r: 255,
+          g: 255,
+          b: 255,
+        },
+      })
+      .toBuffer();
+
+    saveImage(part, docName, name);
+
+    const worker = createWorker();
+
+    await trainLoadersQueue.add(async () => {
+      await worker.load();
+      await worker.loadLanguage("rus");
+      await worker.initialize("rus");
+    });
+
+    const result = await worker.recognize(part, "rus", { tessedit_char_whitelist: filter || undefined });
+    return result.data.text
+      .split("\n")
+      .map((v) => v.toLowerCase())
+      .filter((v) => v);
+  };
+
   saveImage(imageBuffer, docName, "_image");
 
-  const part = await image
-    .extract({ left: maxWidth - width, top: 0, width, height: metadata.height })
-    .extend({
-      bottom: 5,
-      left: 5,
-      top: 5,
-      right: 5,
-      background: {
-        alpha: 1,
-        r: 255,
-        g: 255,
-        b: 255,
-      },
-    })
-    .toBuffer();
-
-  saveImage(part, docName, `list`);
-  const worker = createWorker();
-
-  await trainLoadersQueue.add(async () => {
-    await worker.load();
-    await worker.loadLanguage("rus");
-    await worker.initialize("rus");
-  });
-
-  const result = await worker.recognize(part, "rus");
-  const answers = result.data.text.split("\n").filter((v) => v);
+  const answers = await scanRegion(maxWidth - width, width, "answers");
+  const ids = await scanRegion(0, 36, "ids", "0123456789");
 
   let truthy = 0;
   let score = 0;
 
   answers.forEach((an, i) => {
-    const ok = an === "ДА";
+    const ok = an === "да";
 
     const id = i + from;
 
@@ -115,10 +124,12 @@ const parser = async ({ docName, docImage, trainLoadersQueue, from = 1, extractV
     score += mapper.correct.includes(id) && ok ? 1 : mapper.incorrect.includes(id) && !ok ? 1 : 0;
   });
 
-  console.log("reconizing complete: ", answers);
+  console.log("reconizing complete: ", answers, ids);
   console.log("result: ", "truthy: ", truthy, "score: ", score);
 
-  await worker.terminate();
+  // await worker.terminate();
+
+  return { answers, truthy, score };
 };
 
 module.exports = parser;
