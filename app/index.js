@@ -23,14 +23,14 @@ const init = () => {
   });
 
   app.post("/api/document/parse", upload.single("image"), async (req, res, next) => {
-    const { name } = req.query;
+    const { name, ...rest } = req.query;
     const { file } = req;
 
     if (!name) return res.status(400).send({ message: "Имя документа должно быть указано" });
     if (!schemas[name]) return res.status(400).send({ message: "Неверное имя документа" });
     try {
       console.log("request document parsing..");
-      const docData = await parseDocument(name, file.buffer);
+      const docData = await parseDocument(name, file.buffer, rest);
 
       console.log(`document <${name}> parse:`, util.inspect(docData, false, null, true));
       res.send(docData);
