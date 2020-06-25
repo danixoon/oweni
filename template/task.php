@@ -191,16 +191,3 @@ function render_task_list()
     </div>
 
 
-
-<?php
-  }
-  echo "</div>";
-  function Logout()
-  {
-
-    if (isset($_REQUEST["user"])) {
-      $_SESSION["user"] = null;
-      session_destroy();
-    }
-  }
-}
