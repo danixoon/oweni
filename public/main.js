@@ -38,3 +38,7 @@ function toggleCardEditModal(profileId) {
 function toggleCardRemoveModal(profileId) {
   $(`#card-remove__modal-${profileId}`).toggleClass("visible");
 }
+
+function toggleFormModal(profileId) {
+  $(`#form-edit__modal-${profileId}`).toggleClass("visible");
+}
