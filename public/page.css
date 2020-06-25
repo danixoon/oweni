@@ -54,7 +54,7 @@
 }
 
 .modal__content {
-  height: 70%;
+  /* height: 70%; */
   position: relative;
   z-index: 5;
   background-color: white;
@@ -68,17 +68,23 @@
   height: 100vh;
   padding: 5rem;
   pointer-events: none;
+  overflow-y: auto;
 }
 
-.modal__content > label {
+label {
   margin: 4px;
   display: flex;
   align-items: center;
 }
-.modal__content > label > span {
+label > span {
   flex: 1;
 }
-.modal__content > label > input {
+label > input {
   /* margin: 4px; */
   flex: 2;
+}
+
+.data-group {
+  padding: 0.5rem;
+  border: 1px solid gray;
 }
