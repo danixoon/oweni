@@ -68,7 +68,6 @@
   height: 100vh;
   padding: 5rem;
   pointer-events: none;
-  
 }
 
 .modal__content > label {
@@ -76,10 +75,10 @@
   display: flex;
   align-items: center;
 }
-.modal__content > label > span{
+.modal__content > label > span {
   flex: 1;
-} 
-.modal__content > label  > input{
+}
+.modal__content > label > input {
   /* margin: 4px; */
   flex: 2;
 }
