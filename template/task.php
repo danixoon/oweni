@@ -41,27 +41,20 @@ function render_task_add()
   <?php
 }
 
-
 function render_task_list()
 {
-  global $mysqli;
-  $res = $mysqli->query("SELECT * FROM `profile`");
-  echo "<div style='display: flex; flex-flow: row wrap;'>";
-  while ($row = $res->fetch_assoc()) {
 
+  function render_modal($row, $profile_id)
+  {
+    global $mysqli;
 
   ?>
-    <script>
-      function toggleCardEditModal() {
-        $("#card-edit__modal").toggleClass("visible");
-      }
-    </script>
-    <div id="card-edit__modal" class="modal">
-
-      <div onclick="toggleCardEditModal()" class="modal__background"></div>
+    <div id="card-edit__modal-<?php echo $profile_id; ?>" class="modal">
+      <div onclick="toggleCardEditModal(<?php echo $profile_id; ?>)" class="modal__background"></div>
       <div class="modal__container">
-        <div class="modal__content" style="  text-align: left;padding: 2%;">
-          <label><span>ФИО</span><input type="text" value="<?php echo $row["name"]; ?>"></label>
+        <form class="modal__content" style="text-align: left; padding: 2%;">
+          <!-- <form style="display: inherit;"> -->
+          <label><span>ФИО</span><input name="name" type="text" value="<?php echo $row["name"]; ?>"></label>
           <label><span>Дата рождения</span><input type="text" value="<?php echo $row["birthday"]; ?>"></label>
           <label><span>Гражданство</span><input type="text" value="<?php echo $row["citizenship"]; ?>"></label>
           <label><span>Адрес проживания </span> <input type="text" value="<?php echo $row["living_address"]; ?>"></label>
@@ -77,7 +70,7 @@ function render_task_list()
             <span style="flex:1; max-width:100px;">Окончание</span>
             <span style="flex:3;">Специальность</span></label>
           <?php
-          $profile_id = $row['id'];
+
           $query = "SELECT * FROM education WHERE profile_id='$profile_id'";
           $edu_res = $mysqli->query($query);
           if ($edu_res) {
@@ -133,34 +126,41 @@ function render_task_list()
           <label><span>Увлечения</span> <input type="text" value="<?php echo $row["hobby"]; ?>"></label>
           <br>
           <br>
-          <input style="float: bot;" type="button" value="Сохранить">
-        </div>
+          <button type='submit'> Сохранить </button>
+          <!-- <form> -->
+        </form>
       </div>
     </div>
 
 
-    <script>
-      function toggleCardRemoveModal() {
-        $("#card-remove__modal").toggleClass("visible");
-      }
-    </script>
-
     <div id="card-remove__modal" class="modal">
-      <div onclick="toggleCardRemoveModal()" class="modal__background"></div>
+      <div onclick="toggleCardRemoveModal(<?php echo $profile_id; ?>)" class="modal__background"></div>
       <div class="modal__container">
         <div class="modal__content" style="  text-align: left;padding: 2%;">
-          <form action="/api/remove.php" onsubmit="return onFormSubmit(this, '/task')">
+          <form action="/api/remove.php" onsubmit="return onFormSubmit(this)">
             <label>Вы уверены?</label>
-            <input type="hidden" name="id" value="<?php echo $row["id"]; ?>">
+            <input type="hidden" name="id" value="<?php echo $profile_id; ?>">
             <input type="submit" value="Удалить">
           </form>
 
         </div>
       </div>
     </div>
+  <?php
+  }
+
+
+
+  global $mysqli;
+  $res = $mysqli->query("SELECT * FROM `profile`");
+  echo "<div style='display: flex; flex-flow: row wrap;'>";
+  while ($row = $res->fetch_assoc()) {
+    $profile_id = $row['id'];
+  ?>
     <div style="width:15%; height: 200px; margin:20px; padding:0; flex-basis: 250px;" class="white shadow">
+      <?php render_modal($row, $profile_id); ?>
       <form action="*" method="POST">
-        <select onchange="if(this.value === 'edit') { toggleCardEditModal()} else toggleCardRemoveModal();" style="width:20px; float:right">
+        <select onchange="if(this.value === 'edit') { toggleCardEditModal(<?php echo $profile_id; ?>)} else toggleCardRemoveModal(<?php echo $profile_id; ?>);" style="width:20px; float:right">
           <option disabled selected value=""></option>
           <option value="edit">Изменить</option>
           <option value="remove">Удалить</option>
@@ -189,5 +189,6 @@ function render_task_list()
         ?>
       </p>
     </div>
-<?php }
-} ?>
+<?php
+  }
+}
