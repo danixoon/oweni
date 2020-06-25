@@ -41,99 +41,94 @@ function render_task_add()
   <?php
 }
 
+function render_data($prefix, $data, $labels)
+{
+  $id = $data["id"];
+  foreach ($data as $key => $value) {
+    $label = $labels[$key];
+    $disabled = (substr($key, strlen($key) - 3, 3) === "_id" || $key === "id") ? "disabled" : "";
+    echo "<label><span>$label</span><input $disabled name='$prefix-$key-$id' type='text' value='$value'></label>";
+  }
+}
+
 function render_task_list()
 {
 
-  function render_modal($row, $profile_id)
+  function render_modal($profile_data, $profile_id)
   {
     global $mysqli;
+
+
+
+    $education_fetch = $mysqli->query("SELECT * FROM `education` WHERE profile_id='$profile_id'");
+    $relative_fetch = $mysqli->query("SELECT * FROM `relative` WHERE profile_id='$profile_id'");
+
+    $education_data = $education_fetch ? $education_fetch->fetch_all(MYSQLI_ASSOC) : [];
+    $relative_data = $relative_fetch ? $relative_fetch->fetch_all(MYSQLI_ASSOC) : [];
 
   ?>
     <div id="card-edit__modal-<?php echo $profile_id; ?>" class="modal">
       <div onclick="toggleCardEditModal(<?php echo $profile_id; ?>)" class="modal__background"></div>
       <div class="modal__container">
-        <form class="modal__content" style="text-align: left; padding: 2%;">
-          <!-- <form style="display: inherit;"> -->
-          <label><span>ФИО</span><input name="name" type="text" value="<?php echo $row["name"]; ?>"></label>
-          <label><span>Дата рождения</span><input type="text" value="<?php echo $row["birthday"]; ?>"></label>
-          <label><span>Гражданство</span><input type="text" value="<?php echo $row["citizenship"]; ?>"></label>
-          <label><span>Адрес проживания </span> <input type="text" value="<?php echo $row["living_address"]; ?>"></label>
-          <label><span>Адрес прописки </span> <input type="text" value="<?php echo $row["off_address"]; ?>"></label>
-          <label><span>Домашний телефон </span> <input type="text" value="<?php echo $row["home_phone"]; ?>"></label>
-          <label><span>Мобильный телефон</span> <input type="text" value="<?php echo $row["private_phone"]; ?>"></label>
-          <label><span>Семейное положение</span> <input type="text" value="<?php echo $row["position"]; ?>"></label>
-          <label><span>Образование</span></label>
-          <br>
-          <label>
-            <span style="flex:2; max-width:197px;">Название</span>
-            <span style="flex:1; max-width:100px;">Поступление</span>
-            <span style="flex:1; max-width:100px;">Окончание</span>
-            <span style="flex:3;">Специальность</span></label>
-          <?php
-
-          $query = "SELECT * FROM education WHERE profile_id='$profile_id'";
-          $edu_res = $mysqli->query($query);
-          if ($edu_res) {
-            while ($edu_row = $edu_res->fetch_assoc()) {
-              $name = $edu_row["name"];
-              $income = $edu_row["income"];
-              $release = $edu_row["release"];
-              $branch = $edu_row["branch"];
-              echo "<label style='margin:-2px;'>";
-              echo "<input style='flex:4; max-width:200px;' type='text' value='$name'>";
-              echo "<input style='flex:4; max-width:100px;' type='text' value='$income'>";
-              echo "<input style='flex:4; max-width:100px;' type='text' value='$release'>";
-              echo "<input style='flex:4; min-width:200px;' type='text' value='$branch'>";
-              echo "</label>";
+        <form method="POST" action="/api/profile.php" onsubmit="return onFormSubmit(this)" class="modal__content" style="text-align: left; padding: 2%;">
+          <hr>
+          <p> Профиль </p>
+          <?php render_data("profile", $profile_data, [
+            "id" => "Ид.",
+            "name" => "ФИО",
+            "birthday" => "Дата рождения",
+            "citizenship" => "Гражданство",
+            "living_address" => "Адрес проживания",
+            "off_address" => "Адрес прописки",
+            "home_phone" => "Домашний тел.",
+            "private_phone" => "Личный тел.",
+            "position" => "Семейное положение",
+            "languages" => "Знание языков",
+            "hobby" => "Хобби"
+          ]) ?>
+          <hr>
+          <p> Родственники </p>
+          <div>
+            <?php
+            foreach ($relative_data as $rel_row) {
+              echo "<div class='data-group'>";
+              render_data("relative", $rel_row, [
+                "id" => "Ид.",
+                "role" => "Роль",
+                "work_place" => "Место работы",
+                "birthday" => "Дата рождения",
+                "name" => "ФИО",
+                "profile_id" => "Ид. профиля"
+              ]);
+              echo "</div>";
             }
-          } else {
-            echo $mysqli->error;
-          }
-          ?>
-          <br>
-          <label><span>Знание языков</span> <input type="text" value="<?php echo $row["languages"]; ?>"></label>
-
-          <label><span>Родственники</span></label>
-          <label>
-            <span style="flex:2;">Роль</span>
-            <span style="flex:3;">Место работы</span>
-            <span style="flex:2;">Дата рождения</span>
-            <span style="flex:2;">ФИО</span></label>
-
-          <?php
-          $profile_id = $row['id'];
-          $query = "SELECT * FROM relative WHERE profile_id='$profile_id'";
-          $rel_res = $mysqli->query($query);
-          if ($edu_res) {
-            while ($rel_row = $rel_res->fetch_assoc()) {
-              $role = $rel_row["role"];
-              $work_place = $rel_row["work_place"];
-              $birthday = $rel_row["birthday"];
-              $name = $rel_row["name"];
-              echo "<label style='margin:-2px;'>";
-              echo "<input style='flex:2;' type='text' value='$role'>";
-              echo "<input style='flex:3;' type='text' value='$work_place'>";
-              echo "<input style='flex:1;' type='text' value='$birthday'>";
-              echo "<input style='flex:3;' type='text' value='$name'>";
-              echo "</label>";
+            ?>
+          </div>
+          <p> Образование </p>
+          <hr>
+          <div>
+            <?php
+            foreach ($education_data as $edu_data) {
+              echo "<div class='data-group'>";
+              render_data("education", $edu_data, [
+                "id" => "Ид.",
+                "branch" => "Специальность",
+                "income" => "Год поступления",
+                "release" => "Год окончания",
+                "name" => "ФИО",
+                "profile_id" => "Ид. профиля"
+              ]);
+              echo "</div>";
             }
-          } else {
-            echo $mysqli->error;
-          }
-
-          ?>
-          <br>
-          <label><span>Увлечения</span> <input type="text" value="<?php echo $row["hobby"]; ?>"></label>
-          <br>
-          <br>
+            ?>
+          </div>
           <button type='submit'> Сохранить </button>
-          <!-- <form> -->
         </form>
       </div>
     </div>
 
 
-    <div id="card-remove__modal" class="modal">
+    <div id="card-remove__modal-<?php echo $profile_id; ?>" class="modal">
       <div onclick="toggleCardRemoveModal(<?php echo $profile_id; ?>)" class="modal__background"></div>
       <div class="modal__container">
         <div class="modal__content" style="  text-align: left;padding: 2%;">
@@ -159,13 +154,21 @@ function render_task_list()
   ?>
     <div style="width:15%; height: 200px; margin:20px; padding:0; flex-basis: 250px;" class="white shadow">
       <?php render_modal($row, $profile_id); ?>
-      <form action="*" method="POST">
-        <select onchange="if(this.value === 'edit') { toggleCardEditModal(<?php echo $profile_id; ?>)} else toggleCardRemoveModal(<?php echo $profile_id; ?>);" style="width:20px; float:right">
-          <option disabled selected value=""></option>
-          <option value="edit">Изменить</option>
-          <option value="remove">Удалить</option>
-        </select>
-      </form>
+
+      <select onchange="switch(this.value) {
+          case 'edit':
+             toggleCardEditModal(<?php echo $profile_id; ?>);
+             break;
+          case 'delete':
+             toggleCardRemoveModal(<?php echo $profile_id; ?>);
+             break;
+          }
+          " style="width:20px; float:right">
+        <option disabled selected value=""></option>
+        <option value="edit">Изменить</option>
+        <option value="delete">Удалить</option>
+      </select>
+
       <p style="text-align:left" class="text">
         <?php
         echo $row["id"];

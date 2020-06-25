@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ERROR | E_PARSE);
 session_start();
 
 $PAGE = $_REQUEST["page"];
@@ -10,7 +11,7 @@ $PAGE_SCHEMA = array(
       array("name" => "Поиск", "action" => "search", "link" => "/task/search"),
       array("name" => "Добавление", "action" => "add", "link" => "/task/add")
     )
-    )
+  )
 );
 
 $SECTION = explode('/', $PAGE)[0];
@@ -44,7 +45,7 @@ function qu($var)
 }
 
 
-function send_error($code, $message, $data)
+function send_error($code, $message, $data = [])
 {
   http_response_code($code ?? 500);
   echo json_encode(["message" => $message, "data" => $data]);
