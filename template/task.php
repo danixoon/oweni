@@ -42,7 +42,7 @@ function render_task_add()
 }
 
 
-function  render_task_list()
+function render_task_list()
 {
   global $mysqli;
   $res = $mysqli->query("SELECT * FROM `profile`");
