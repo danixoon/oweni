@@ -25,7 +25,7 @@ if ($response) {
     "birthday" => qu(parse_date($data["birthday"])),
     "citizenship" =>  qu($data["citizenship"]),
     "living_address" =>  qu($data["living_address"]),
-    "off_address" =>   qu($data["official_address"]),
+    "off_address" =>   qu($data["off_address"]),
     "home_phone" =>  qu($data["home_phone"]),
     "private_phone" =>  qu($data["private_phone"]),
     "position" =>  qu($data["position"]),
@@ -79,6 +79,7 @@ if ($response) {
     return "(" . implode(", ",  [
       "NULL",
       qu("Родственник"),
+      qu($rel["work_place"]),
       qu(parse_date($rel["birthday"])),
       qu($rel["name"]),
       $profile_id
@@ -88,6 +89,7 @@ if ($response) {
 
   $insert_relative_result = $mysqli->query("$insert_relative");
   $insert_education_result = $mysqli->query("$insert_education");
+
 
   if (!$insert_relative_result) {
     send_error(500, "Ошибка добавления родственных связей.", ["mysql" => $mysqli->error, "query" => $insert_relative]);
@@ -100,4 +102,5 @@ if ($response) {
   }
 
   http_response_code(200);
+  header("Location: /task");
 } else http_response_code(500);

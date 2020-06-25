@@ -26,7 +26,3 @@ require_once(realpath(dirname(__FILE__) . "/../config.php"));
     }
 ?>
 
-<!-- echo ('<article class="card shadow">'/);
-        echo ('<h2><?php echo ($ids[`name`]); ?> / <?php echo ($j); ?></h2>');
-        echo ('<h2 class="card__text">true</h2>');
-        echo ('</article>'); -->

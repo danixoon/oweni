@@ -124,7 +124,7 @@ const saveImage = async (buffer, schemaName, fieldName) => {
   }
 };
 
-const parsingQueue = new Queue({ concurrency: 4 });
+const parsingQueue = new Queue({ concurrency: 8 });
 const trainLoadersQueue = new Queue({ concurrency: 1 });
 
 const parseDocument = async (docName, docImage) => {
@@ -152,6 +152,8 @@ const parseDocument = async (docName, docImage) => {
     const result = await worker.recognize(part, "rus");
     console.log("reconizing complete: ", data.name);
     await worker.terminate();
+    await new Promise((res) => setTimeout(() => { res() }), 150);
+
     return result;
 
     // await clearThis();
@@ -221,7 +223,6 @@ const parseDocument = async (docName, docImage) => {
   saveImage(buffer, docName, "_image");
 
   const flattenData = result.reduce((acc, data) => ({ ...acc, [data.key]: data.value }), {});
-
   return flattenData;
 };
 

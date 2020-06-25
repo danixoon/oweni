@@ -17,7 +17,10 @@ if (!$result) {
 }
 
 $user = $result->fetch_assoc();
-if (!$user) return http_response_code(403);
+if (!$user) {
+  return http_response_code(403);
+ 
+}
 
 $_SESSION["user"] = $user;
 http_response_code(200);

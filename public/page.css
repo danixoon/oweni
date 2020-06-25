@@ -24,3 +24,58 @@
   text-align: center;
   font-weight: bold;
 }
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  display: none;
+}
+.visible {
+  display: initial;
+  /* visibility: visible; */
+}
+
+.modal__background {
+  background-color: rgba(0, 0, 0, 0.3);
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.modal__content {
+  height: 70%;
+  position: relative;
+  z-index: 5;
+  background-color: white;
+  pointer-events: all;
+}
+
+.modal__container {
+  position: relative;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  padding: 5rem;
+  pointer-events: none;
+  
+}
+
+.modal__content > label {
+  margin: 4px;
+  display: flex;
+  align-items: center;
+}
+.modal__content > label > span{
+  flex: 1;
+} 
+.modal__content > label  > input{
+  /* margin: 4px; */
+  flex: 2;
+}
