@@ -15,11 +15,19 @@ const DATA_TYPE = {
 
 const SCHEMA_TYPE = {
   RECRUIT_CASE: "recruitCase",
+  TEST_FROM: "testForm",
 };
 
 const extractValue = (text) => text.replace(/\s+/, " ").replace("\n", "").trim();
 
 const schemas = {
+  [SCHEMA_TYPE.TEST_FROM]: [
+    {
+      name: "testCase",
+      bounds: [1, 73 / 2, 1236 / 2, 164 / 2],
+      type: DATA_TYPE.TEXT,
+    },
+  ],
   [SCHEMA_TYPE.RECRUIT_CASE]: [
     {
       name: "last_name",
@@ -152,7 +160,13 @@ const parseDocument = async (docName, docImage) => {
     const result = await worker.recognize(part, "rus");
     console.log("reconizing complete: ", data.name);
     await worker.terminate();
-    await new Promise((res) => setTimeout(() => { res() }), 150);
+    await new Promise(
+      (res) =>
+        setTimeout(() => {
+          res();
+        }),
+      150
+    );
 
     return result;
 

@@ -11,6 +11,7 @@ function onFormSubmit(form, redirect) {
     .then(async (response) => {
       if (response.ok) {
         console.log(await response.text());
+        alert("Операция успешно выполнена.");
         if (redirect) window.location.href = redirect;
         else window.location.reload();
       } else {
@@ -28,4 +29,12 @@ function onFormSubmit(form, redirect) {
     .catch((response) => console.error(response));
 
   return false;
+}
+
+function toggleCardEditModal(profileId) {
+  $(`#card-edit__modal-${profileId}`).toggleClass("visible");
+}
+
+function toggleCardRemoveModal(profileId) {
+  $(`#card-remove__modal-${profileId}`).toggleClass("visible");
 }
