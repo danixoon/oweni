@@ -4,9 +4,11 @@ require_once realpath(__DIR__ . "/../config.php");
 function render_task_search($items = array())
 {
 ?>
-  <form class="task-search__form" onsubmit="return onFormSubmit(this)">
-    <input name="ФИО">
-    <input name="Категория">
+  <form class="task-search__form">
+    <label>
+      ФИО
+      <input value="<?php echo $_GET["name"] ?>" name="name">
+    </label>
     <button type="submit"> Найти </button>
   </form>
   <table class="task-search__table">

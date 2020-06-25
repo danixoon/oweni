@@ -1,4 +1,4 @@
-function onFormSubmit(form, body) {
+function onFormSubmit(form, redirect) {
   const data = new FormData(form);
   const url = form.getAttribute("action");
   const method = form.getAttribute("method") || "GET";
@@ -11,13 +11,18 @@ function onFormSubmit(form, body) {
     .then(async (response) => {
       if (response.ok) {
         console.log(await response.text());
-        // window.location.reload();
+        if (redirect) window.location.href = redirect
+        else window.location.reload();
       }
       else {
         let responseData = "";
         try {
           responseData = await response.json();
-        } catch (err) { }
+        } catch (err) {
+          console.error(err);
+        }
+        let errorMessage = `Ошибка ${response.status}: ` + responseData || "";
+        console.error(errorMessage);
         alert(`Ошибка ${response.status}: ` + responseData || "");
       }
     })
