@@ -62,10 +62,10 @@ const mapper = {
   incorrect: [2, 12, 13, 14, 19, 21, 23, 24, 28, 30, 38, 39, 46, 54, 55, 58, 61, 68],
 };
 
-const parser = async ({ docName, docImage, trainLoadersQueue, from = 1, extractValue, saveImage, parsingQueue, DATA_TYPE, schemas }) => {
+const parser = async ({ docName, docImage, trainLoadersQueue, from, extractValue, saveImage, parsingQueue, DATA_TYPE, schemas }) => {
   // const to = 33;
 
-  const width = 60;
+  const width = 80;
   const maxWidth = 623;
 
   let image = sharp(docImage).trim().resize(maxWidth);
@@ -110,15 +110,32 @@ const parser = async ({ docName, docImage, trainLoadersQueue, from = 1, extractV
   saveImage(imageBuffer, docName, "_image");
 
   const answers = await scanRegion(maxWidth - width, width, "answers");
-  const ids = await scanRegion(0, 36, "ids", "0123456789");
+
+  let fromOffset = from || 1;
+  const ids = await scanRegion(0, 32, "ids", "0123456789");
+
+  if (!from) {
+    ids.some((id, i) => {
+      if (i === ids.length - 1) return false;
+
+      let a = Number(id);
+      let b = Number(ids[i + 1]);
+
+      if (!isNaN(a) && !isNaN(b) && b - a === 1) {
+        fromOffset = id - i;
+        console.log("start index: ", fromOffset);
+        return true;
+      }
+    });
+  }
 
   let truthy = 0;
   let score = 0;
 
   answers.forEach((an, i) => {
-    const ok = an === "да";
+    const ok = /да/.test(an);
 
-    const id = i + from;
+    const id = i + fromOffset;
 
     truthy += ok && mapper.truthy.includes(id) ? 1 : 0;
     score += mapper.correct.includes(id) && ok ? 1 : mapper.incorrect.includes(id) && !ok ? 1 : 0;
@@ -126,8 +143,6 @@ const parser = async ({ docName, docImage, trainLoadersQueue, from = 1, extractV
 
   console.log("reconizing complete: ", answers, ids);
   console.log("result: ", "truthy: ", truthy, "score: ", score);
-
-  // await worker.terminate();
 
   return { answers, truthy, score };
 };
