@@ -189,5 +189,5 @@ function render_task_list()
         ?>
       </p>
     </div>
-
-
+<?php }
+} ?>
