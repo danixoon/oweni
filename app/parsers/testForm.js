@@ -65,7 +65,7 @@ const mapper = {
 const parser = async ({ docName, docImage, trainLoadersQueue, from, extractValue, saveImage, parsingQueue, DATA_TYPE, schemas }) => {
   // const to = 33;
 
-  const width = 80;
+  const width = 70;
   const maxWidth = 623;
 
   let image = sharp(docImage).trim().resize(maxWidth);
@@ -109,7 +109,7 @@ const parser = async ({ docName, docImage, trainLoadersQueue, from, extractValue
 
   saveImage(imageBuffer, docName, "_image");
 
-  const answers = await scanRegion(maxWidth - width, width, "answers");
+  const answers = await scanRegion(maxWidth - width - 10, width, "answers");
 
   let fromOffset = from || 1;
   const ids = await scanRegion(0, 32, "ids", "0123456789");

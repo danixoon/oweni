@@ -149,7 +149,7 @@ switch ($name) {
       }
 
 
-      $query = "UPDATE `profile` SET `score`='$score', `tryethy`='$truthy' WHERE `id`='$profile_id'";
+      $query = "UPDATE `profile` SET `score`='$score', `truethy`='$truthy' WHERE `id`='$profile_id'";
       if (!$mysqli->query($query)) {
         return send_error(500, "Ошибка обновления данных профиля");
       }

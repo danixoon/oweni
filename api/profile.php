@@ -21,8 +21,7 @@ foreach ($_POST as $key => $value) {
 $queries = [];
 
 foreach ($post_data as $table => $rows) {
-  foreach ($rows as $data) {
-    $id = $data["id"];
+  foreach ($rows as $id => $data) {
     $data_without_ids = array_filter($data, function ($value, $key) {
       return $key !== "id" && $key !== "profile_id";
     }, ARRAY_FILTER_USE_BOTH);
