@@ -8,6 +8,7 @@
       "name": "Launch Test",
       "program": "${workspaceFolder}/app/test.js",
       "request": "launch",
+      "args": ["testForm"],
       "console": "integratedTerminal",
       "skipFiles": ["<node_internals>/**"],
       "type": "pwa-node"
