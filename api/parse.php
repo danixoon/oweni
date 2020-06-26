@@ -7,13 +7,36 @@ if (!$_SESSION["user"]) return http_response_code(403);
 
 
 $name = $_REQUEST["name"];
-$images = $_FILES["image"];
+// $images = $_FILES["image"];
+
 
 function parse_date($date)
 {
   $exploded = explode(".", $date);
   return $exploded[2] . "-" . $exploded[1] . "-" . $exploded[0];
 }
+
+$images = [];
+$countfiles = count($_FILES['image']['name']);
+for ($i = 0; $i < $countfiles; $i++)
+  array_push($images, []);
+
+
+// Looping all files
+// for ($i = 0; $i < $countfiles; $i++) {
+$test = $_FILES["image"]["name"][0];
+foreach ($_FILES['image'] as $key => $value) {
+  $i = 0;
+  foreach ($value as $img_value) {
+    $images[$i][$key] = $img_value;
+    $i++;
+  }
+}
+
+
+// Upload file
+// move_uploaded_file($_FILES['file']['tmp_name'][$i], 'upload/' . $filename);
+// }
 
 switch ($name) {
   case "recruitCase": {
@@ -108,57 +131,30 @@ switch ($name) {
 
         http_response_code(200);
         header("Location: /task");
-      } else http_response_code(500);
+      } else return send_error(500, "Ошибка отправки запроса обработки");
       break;
     }
   case "testForm": {
+      $profile_id = $_REQUEST["profile_id"];
+      $score = 0;
+      $truthy = 0;
 
-      $response = send_post("localhost:5050/api/document/parse?name=$name", array("image" => new CURLFile($image["tmp_name"], $image["type"], $image["name"])));
-      if ($response) {
-        $data = json_decode($response, true);
-        print_r($response);
-        $mapper = array(
-          "name" => function () use ($data) {
-            return qu($data["last_name"] . " " . $data["first_name"] . " " . $data["family_name"]);
-          },
-          "truethy" =>   qu($data["truethy"]),
-          "score" =>   qu($data["score"])
-        );
-
-        $mapped_data = array_map(function ($value) use ($data) {
-          if (is_callable($value)) return $value();
-          else return $value;
-        }, $mapper);
-
-        $profile_values = implode(", ", [
-          "NULL",
-          "NULL",
-          "NULL",
-          "NULL",
-          $mapped_data["name"],
-          "NULL",
-          "NULL",
-          "NULL",
-          "NULL",
-          "NULL",
-          "NULL",
-          $mapped_data["truethy"],
-          $mapped_data["score"]
-        ]);
-        $insert_profile = "INSERT INTO `profile` VALUES ($profile_values);";
-
-        $profile_result = $mysqli->query($insert_profile);
-        if (!$profile_result) {
-          send_error(500, "Ошибка добавления профиля", ["mysql" => $mysqli->error, "query" => $insert_profile]);
-          return;
-        }
-        http_response_code(200);
-        header("Location: /task");
-      } else http_response_code(500);
+      foreach ($images as $image) {
+        $response = send_post("localhost:5050/api/document/parse?name=$name", array("image" => new CURLFile($image["tmp_name"], $image["type"], $image["name"])));
+        if ($response) {
+          $data = json_decode($response, true);
+          $score += $data["score"];
+          $truthy += $data["truthy"];
+        } else return send_error(500, "Ошибка отправки запроса обработки");
+      }
 
 
+      $query = "UPDATE `profile` SET `score`='$score', `tryethy`='$truthy' WHERE `id`='$profile_id'";
+      if (!$mysqli->query($query)) {
+        return send_error(500, "Ошибка обновления данных профиля");
+      }
 
-
+      http_response_code(200);
 
       break;
     }

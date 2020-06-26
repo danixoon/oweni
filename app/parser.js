@@ -151,4 +151,4 @@ const parseDocument = (docName, docImage, props) => {
   }
 };
 
-module.exports = { parseDocument };
+module.exports = { parseDocument, schemas, SCHEMA_TYPE, DATA_TYPE };

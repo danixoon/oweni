@@ -36,8 +36,9 @@ function render_task_add()
       <option value="recruitCase"> Анекта </option>
       <option selected value="testForm"> Тест НПУ </option>
     </select>
-    <input type="file" multiple name="image">
-    <button type="submit"> Обработать </button>
+    <input placeholder="ид. профиля" type="number" name="profile_id">
+    <input type="file" multiple="multiple" name="image[]">
+    <button type="submit"> Об5работать </button>
   </form>
   <?php
 }
@@ -149,11 +150,11 @@ function render_task_list()
         <div class="modal__content" style="  text-align: left;padding: 2%;">
           <form action="/api/remove.php" onsubmit="return onFormSubmit(this)">
             <label>Истиность</label>
-            <input type="text" name="truethy" value="<?php echo $profile_data["truethy"];?>">
+            <input type="text" name="truethy" value="<?php echo $profile_data["truethy"]; ?>">
             <label>Индекс НПУ</label>
-            <input type="text" name="score" value="<?php echo $profile_data["score"];?>">
+            <input type="text" name="score" value="<?php echo $profile_data["score"]; ?>">
             <label>ФИО заполнившего</label>
-            <input type="text" name="name" value="<?php echo $profile_data["name"];?>">
+            <input type="text" name="name" value="<?php echo $profile_data["name"]; ?>">
             <br>
             <input type="hidden" name="id" value="<?php echo $profile_id; ?>">
             <input type="submit" value="Сохранить">
