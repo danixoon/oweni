@@ -86,7 +86,9 @@ function render_task_list()
             "private_phone" => "Личный тел.",
             "position" => "Семейное положение",
             "languages" => "Знание языков",
-            "hobby" => "Хобби"
+            "hobby" => "Хобби",
+            "truethy" => "Баллы истинности",
+            "score" => "Баллы НПУ"
           ]) ?>
           <hr>
           <p> Родственники </p>
@@ -149,15 +151,12 @@ function render_task_list()
       <div class="modal__container">
         <div class="modal__content" style="  text-align: left;padding: 2%;">
           <form action="/api/remove.php" onsubmit="return onFormSubmit(this)">
-            <label>Истиность</label>
-            <input type="text" name="truethy" value="<?php echo $profile_data["truethy"]; ?>">
-            <label>Индекс НПУ</label>
-            <input type="text" name="score" value="<?php echo $profile_data["score"]; ?>">
-            <label>ФИО заполнившего</label>
-            <input type="text" name="name" value="<?php echo $profile_data["name"]; ?>">
+            <label>Истиность: <?php echo $profile_data["truethy"]; ?></label>
+            <label>Индекс НПУ: <?php echo $profile_data["score"]; ?></label>
+            <label>ФИО заполнившего: <?php echo $profile_data["name"]; ?></label>
             <br>
+            
             <input type="hidden" name="id" value="<?php echo $profile_id; ?>">
-            <input type="submit" value="Сохранить">
           </form>
 
         </div>
