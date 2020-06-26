@@ -31,7 +31,7 @@ function render_task_add()
 {
 ?>
 
-  <form enctype="multipart/form-data" method="POST" action="/api/parse.php" class="task-add__form" onsubmit="return onFormSubmit(this)">
+  <form enctype="multipart/form-data" method="POST" action="/api/parse.php" class="task-add__form" onsubmit="return onFormSubmit(this, 'Location: /task')">
     <select name="name">
       <option value="recruitCase"> Анекта </option>
       <option selected value="testForm"> Тест НПУ </option>
