@@ -155,7 +155,7 @@ function render_task_list()
             <label>Индекс НПУ: <?php echo $profile_data["score"]; ?></label>
             <label>ФИО заполнившего: <?php echo $profile_data["name"]; ?></label>
             <br>
-            
+
             <input type="hidden" name="id" value="<?php echo $profile_id; ?>">
           </form>
 
@@ -173,7 +173,7 @@ function render_task_list()
   while ($row = $res->fetch_assoc()) {
     $profile_id = $row['id'];
   ?>
-    <div style="width:15%; height: 200px; margin:20px; padding:0; flex-basis: 250px;" class="white shadow">
+    <div style="width:15%; min-height: 200px; margin:20px; padding:0; flex-basis: 250px;" class="white shadow">
       <?php render_modal($row, $profile_id); ?>
 
       <select onchange="switch(this.value) {
@@ -213,6 +213,20 @@ function render_task_list()
       <p>
         <?php
         echo "Баллы НПУ: " . $row["score"];
+        ?>
+      </p>
+      <p>
+        <?php
+        $score = $row["score"];
+        $result = "";
+        if ($score >= 29)
+          $result =  "Высокая вероятность нервно-психических срывов. Необходимо дополнительное медобследование психиатра, невропатолога.";
+        else if ($score >= 14)
+          $result = "Нервно-психические срывы вероятны, особенно в экстремальных условиях. Необходимо учитывать этот факт при вынесении заключения о пригодности.";
+        else
+          $result = "Нервно-психические срывы маловероятны. При наличии других положительных данных можно рекомендовать на специальности, требующие повышенной НПУ.";
+
+        echo "Результат теста: $result";
         ?>
       </p>
     </div>
