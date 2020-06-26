@@ -69,18 +69,18 @@ CREATE TABLE `medical` (
 
 CREATE TABLE `profile` (
   `id` int NOT NULL,
-  `position` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `living_address` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `off_address` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `position` varchar(50) DEFAULT NULL,
+  `living_address` varchar(200) DEFAULT NULL,
+  `off_address` varchar(200) DEFAULT NULL,
+  `name` varchar(50) DEFAULT NULL,
   `birthday` date DEFAULT NULL,
-  `private_phone` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `private_phone` varchar(50) DEFAULT NULL,
   `home_phone` varchar(50) DEFAULT NULL,
   `languages` varchar(50) DEFAULT NULL,
   `hobby` varchar(50) DEFAULT NULL,
-  `citizenship` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `truethy` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `score` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL
+  `citizenship` varchar(50) DEFAULT NULL,
+  `truethy` varchar(10) DEFAULT NULL,
+  `score` varchar(10) DEFAULT NULL
 );
 
 -- --------------------------------------------------------
@@ -210,3 +210,4 @@ ALTER TABLE `medical`
 ALTER TABLE `relative`
   ADD CONSTRAINT `relative_ibfk_1` FOREIGN KEY (`profile_id`) REFERENCES `profile` (`id`) ON DELETE CASCADE;
 
+INSERT INTO `account` VALUES (NULL, "test", "test");

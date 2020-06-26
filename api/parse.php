@@ -45,7 +45,6 @@ switch ($name) {
       $response = send_post("localhost:5050/api/document/parse?name=$name", array("image" => new CURLFile($image["tmp_name"], $image["type"], $image["name"])));
       if ($response) {
         $data = json_decode($response, true);
-        print_r($response);
         $mapper = array(
           "name" => function () use ($data) {
             return qu($data["last_name"] . " " . $data["first_name"] . " " . $data["family_name"]);
@@ -79,7 +78,9 @@ switch ($name) {
           $mapped_data["home_phone"],
           $mapped_data["languages"],
           $mapped_data["hobby"],
-          $mapped_data["citizenship"]
+          $mapped_data["citizenship"],
+          "NULL",
+          "NULL"
         ]);
         $insert_profile = "INSERT INTO `profile` VALUES ($profile_values);";
 
@@ -130,7 +131,6 @@ switch ($name) {
         }
 
         http_response_code(200);
-        header("Location: /task");
       } else return send_error(500, "Ошибка отправки запроса обработки");
       break;
     }
