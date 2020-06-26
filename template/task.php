@@ -178,20 +178,21 @@ function render_task_list()
       <?php render_modal($row, $profile_id); ?>
 
       <select onchange="switch(this.value) {
-          // case 'edit':
-          //    toggleCardEditModal(<?php echo $profile_id; ?>);
-          //    break;
-          // case 'delete':
-          //    toggleCardRemoveModal(<?php echo $profile_id; ?>);
-          //    break;
-          case 'edit':
-            toggleFormModal(<?php echo $profile_id; ?>);
-            break;
+            case 'edit':
+              toggleCardEditModal(<?php echo $profile_id; ?>);
+              break;
+            case 'delete':
+              toggleCardRemoveModal(<?php echo $profile_id; ?>);
+              break;
+              case 'testResult':
+                toggleFormModal(<?php echo $profile_id; ?>);
+                break;
           }
           " style="width:20px; float:right">
         <option disabled selected value=""></option>
+        <option value="testResult">Результаты Теста</option>
         <option value="edit">Изменить</option>
-        <!-- <option value="delete">Удалить</option> -->
+        <option value="delete">Удалить</option>
       </select>
 
       <p style="text-align:left" class="text">
