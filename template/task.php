@@ -31,11 +31,12 @@ function render_task_add()
 {
 ?>
 
-  <form enctype="multipart/form-data" method="POST" action="/api/parse.php" class="task-add__form" onsubmit="return onFormSubmit(this)">
+  <form enctype="multipart/form-data" method="POST" action="/api/parse.php" class="task-add__form" onsubmit="return onFormSubmit(this, 'Location: /task')">
     <select name="name">
-      <option selected value="recruitCase"> Анекта </option>
+      <option value="recruitCase"> Анекта </option>
+      <option selected value="testForm"> Тест НПУ </option>
     </select>
-    <input type="file" name="image">
+    <input type="file" multiple name="image">
     <button type="submit"> Обработать </button>
   </form>
   <?php
@@ -141,6 +142,26 @@ function render_task_list()
         </div>
       </div>
     </div>
+
+    <div id="form-edit__modal-<?php echo $profile_id; ?>" class="modal">
+      <div onclick="toggleFormModal(<?php echo $profile_id; ?>)" class="modal__background"></div>
+      <div class="modal__container">
+        <div class="modal__content" style="  text-align: left;padding: 2%;">
+          <form action="/api/remove.php" onsubmit="return onFormSubmit(this)">
+            <label>Истиность</label>
+            <input type="text" name="truethy" value="<?php echo $profile_data["truethy"];?>">
+            <label>Индекс НПУ</label>
+            <input type="text" name="score" value="<?php echo $profile_data["score"];?>">
+            <label>ФИО заполнившего</label>
+            <input type="text" name="name" value="<?php echo $profile_data["name"];?>">
+            <br>
+            <input type="hidden" name="id" value="<?php echo $profile_id; ?>">
+            <input type="submit" value="Сохранить">
+          </form>
+
+        </div>
+      </div>
+    </div>
   <?php
   }
 
@@ -156,17 +177,20 @@ function render_task_list()
       <?php render_modal($row, $profile_id); ?>
 
       <select onchange="switch(this.value) {
+          // case 'edit':
+          //    toggleCardEditModal(<?php echo $profile_id; ?>);
+          //    break;
+          // case 'delete':
+          //    toggleCardRemoveModal(<?php echo $profile_id; ?>);
+          //    break;
           case 'edit':
-             toggleCardEditModal(<?php echo $profile_id; ?>);
-             break;
-          case 'delete':
-             toggleCardRemoveModal(<?php echo $profile_id; ?>);
-             break;
+            toggleFormModal(<?php echo $profile_id; ?>);
+            break;
           }
           " style="width:20px; float:right">
         <option disabled selected value=""></option>
         <option value="edit">Изменить</option>
-        <option value="delete">Удалить</option>
+        <!-- <option value="delete">Удалить</option> -->
       </select>
 
       <p style="text-align:left" class="text">
@@ -182,13 +206,12 @@ function render_task_list()
       <hr style="size:2px;">
       <p style="margin-top:25%;">
         <?php
-        echo $row["home_phone"];
+        echo "Истинность: " . $row["truethy"];
         ?>
       </p>
-      <hr>
       <p>
         <?php
-        echo $row["living_address"];
+        echo "Баллы НПУ: " . $row["score"];
         ?>
       </p>
     </div>

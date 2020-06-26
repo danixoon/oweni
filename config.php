@@ -6,10 +6,11 @@ $PAGE = $_REQUEST["page"];
 $PAGE_SCHEMA = array(
   "main" => array("name" => "Главная"),
   "task" => array(
-    "name" => "Личные дела",
+    "name" => "Список
+    ",
     "group" => array(
       array("name" => "Поиск", "action" => "search", "link" => "/task/search"),
-      array("name" => "Добавление", "action" => "add", "link" => "/task/add")
+      array("name" => "Обработака", "action" => "add", "link" => "/task/add")
     )
   )
 );
