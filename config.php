@@ -18,7 +18,7 @@ $PAGE_SCHEMA = array(
 $SECTION = explode('/', $PAGE)[0];
 $ACTION = explode("/", $PAGE)[1];
 
-$mysqli = new mysqli("localhost", "root", "", "oweni");
+$mysqli = new mysqli("localhost", "root", "root", "oweni");
 
 function start_with($string, $predicate)
 {
