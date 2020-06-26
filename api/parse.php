@@ -7,15 +7,17 @@ if (!$_SESSION["user"]) return http_response_code(403);
 
 
 $name = $_REQUEST["name"];
-$image = $_FILES["image"];
+$images = $_FILES["image"];
+
+function parse_date($date)
+{
+  $exploded = explode(".", $date);
+  return $exploded[2] . "-" . $exploded[1] . "-" . $exploded[0];
+}
 
 switch ($name) {
   case "recruitCase": {
-      function parse_date($date)
-      {
-        $exploded = explode(".", $date);
-        return $exploded[2] . "-" . $exploded[1] . "-" . $exploded[0];
-      }
+      $image = $images[0];
 
       $response = send_post("localhost:5050/api/document/parse?name=$name", array("image" => new CURLFile($image["tmp_name"], $image["type"], $image["name"])));
       if ($response) {
