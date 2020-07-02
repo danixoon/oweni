@@ -31,14 +31,15 @@ function render_task_add()
 {
 ?>
 
-  <form enctype="multipart/form-data" method="POST" action="/api/parse.php" class="task-add__form" onsubmit="return onFormSubmit(this, 'Location: /task')">
+  <form enctype="multipart/form-data" method="POST" action="/api/parse.php" 
+  class="task-add__form" onsubmit="return onFormSubmit(this, 'Location: /task')">
     <select name="name">
       <option value="recruitCase"> Анекта </option>
       <option selected value="testForm"> Тест НПУ </option>
     </select>
     <input placeholder="ид. профиля" type="number" name="profile_id">
     <input type="file" multiple="multiple" name="image[]">
-    <button type="submit"> Об5работать </button>
+    <button type="submit"> Обработать </button>
   </form>
   <?php
 }
@@ -72,7 +73,8 @@ function render_task_list()
     <div id="card-edit__modal-<?php echo $profile_id; ?>" class="modal">
       <div onclick="toggleCardEditModal(<?php echo $profile_id; ?>)" class="modal__background"></div>
       <div class="modal__container">
-        <form method="POST" action="/api/profile.php" onsubmit="return onFormSubmit(this)" class="modal__content" style="text-align: left; padding: 2%;">
+        <form method="POST" action="/api/profile.php" onsubmit="return onFormSubmit(this)" 
+        class="modal__content" style="text-align: left; padding: 2%;">
           <hr>
           <p> Профиль </p>
           <?php render_data("profile", $profile_data, [

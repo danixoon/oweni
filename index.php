@@ -28,7 +28,8 @@ render_header("Главная");
   <div class="content">
     <div class="header shadow">
       <div class="img-header"></div>
-      <?php if ($_SESSION["user"]) echo "<button onclick=\"fetch('/api/logout.php').then(() => window.location.reload())\" class='logout__button'> Выйти </button>" ?>
+      <?php if ($_SESSION["user"]) echo "<button onclick=\"fetch('/api/logout.php').then(() 
+                                        => window.location.reload())\" class='logout__button'> Выйти </button>" ?>
       <h1><?php echo $PAGE_SCHEMA[$PAGE]["name"]  ?></h1>
     </div>
     <main class="page">
